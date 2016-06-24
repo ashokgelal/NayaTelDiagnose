@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="SpeedTestModule.Views.IntertnetSpeedTestView"
+                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:infrastructure="clr-namespace:ViewSwitchingNavigation.Infrastructure;assembly=ViewSwitchingNavigation.Infrastructure" 
+
+    mc:Ignorable="d"      >
+
+    <UserControl.Resources>
+ 
+        <Style x:Key="EmailListContainerStyle" TargetType="ListBoxItem" BasedOn="{StaticResource DefaultListBoxItemStyle}">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
+
+
+        <DataTemplate x:Key="ListTemplate">
+
+             
+                <Grid     VerticalAlignment="Top">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+ 
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border  Grid.Row="0" Grid.Column="0"   Background="{StaticResource ListViewOddBrush}"    />
+                    <Border  Grid.Row="0" Grid.Column="1"  Background="{StaticResource ListViewEvenBrush}" />
+
+                    <TextBlock  Grid.Row="0" Grid.Column="0" Text="Download :"  Style="{StaticResource HeadingLabelStyle}" />
+
+                    <TextBlock    Grid.Row="0" Grid.Column="1"  Text="{Binding Download}"  Style="{StaticResource HeadingValueLabelStyle}"/>
+ 
+                </Grid>
+
+ 
+        </DataTemplate>
+
+
+        <DataTemplate x:Key="ListTemplate2">
+
+            <Border BorderBrush="White"   >
+                <Grid     VerticalAlignment="Top">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+ 
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border  Grid.Row="0" Grid.Column="0"   Background="{StaticResource ListViewOddBrush}"    />
+                    <Border  Grid.Row="0" Grid.Column="1"    Background="{StaticResource ListViewEvenBrush}" />
+
+ 
+
+                     <TextBlock  Grid.Row="0" Grid.Column="0" Text="Upload :"  Style="{StaticResource HeadingLabelStyle}" />
+
+                     <TextBlock    Grid.Row="0" Grid.Column="1"  Text="{Binding Upload}"  Style="{StaticResource HeadingValueLabelStyle}"/>
+
+                </Grid>
+
+            </Border>
+
+        </DataTemplate>
+
+    </UserControl.Resources>
+
+
+ 
+        <StackPanel>
+            <ListBox x:Name="ListBox"
+                 ItemsSource="{Binding SpeedTestDownloadCollectionView}" 
+                 ItemTemplate="{StaticResource ListTemplate}"
+                 ItemContainerStyle="{StaticResource EmailListContainerStyle}"
+                    />
+
+            <ListBox x:Name="ListBox2"
+                 ItemsSource="{Binding SpeedTestUploadCollectionView}" 
+                 ItemTemplate="{StaticResource ListTemplate2}"
+                 ItemContainerStyle="{StaticResource EmailListContainerStyle}"
+                    />
+
+        </StackPanel>
+ 
+</UserControl>

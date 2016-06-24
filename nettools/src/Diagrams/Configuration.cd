@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="nettools.Configuration.JsonConfiguration">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgIAAIAACAgAAAAAABCAAAAgBAAAQAAAAAIAAABA=</HashCode>
+      <FileName>Configuration\JsonConfiguration.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.833" />
+  </Class>
+  <Class Name="System.Object">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Interface Name="nettools.Configuration.IConfiguration">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgIAAIAAAAgAAAAAABAAAAAgAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Configuration\IConfiguration.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

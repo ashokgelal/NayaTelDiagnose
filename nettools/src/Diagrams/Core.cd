@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="nettools.Program">
+    <Position X="0.5" Y="4.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAACABAAAAEAAAABAAAAEAAEAABIAAABAAEAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.Object">
+    <Position X="8.75" Y="1" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="nettools.Core.ArgumentParser">
+    <Position X="3" Y="4.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>CAAgAAAAAAAAAAAAAAAAAAAAEAgAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Core\ArgumentParser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Core.CommandExecutor">
+    <Position X="6.25" Y="4.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAABAAIAAAAAAAAAAAAABAAAAAAAAAAAAAAACAg=</HashCode>
+      <FileName>Core\CommandExecutor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Core.Logger">
+    <Position X="9" Y="4.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAYIAAAAAADAAAAgAAEAAAABAQEIAABA=</HashCode>
+      <FileName>Core\Logger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Plugins.PluginCompiler">
+    <Position X="11.75" Y="4.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAgIAQACAA=</HashCode>
+      <FileName>Plugins\PluginCompiler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Plugins.PluginLoader">
+    <Position X="14.5" Y="4.25" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>EAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Plugins\PluginLoader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Utils.ConsoleProgressBar">
+    <Position X="19.75" Y="1" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Utils\ConsoleProgressBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Utils.DownloadUtils">
+    <Position X="21.75" Y="1" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utils\DownloadUtils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Utils.IPUtils">
+    <Position X="24.25" Y="1" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAACAAAAAAAAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utils\IPUtils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.MonoUtils">
+    <Position X="19.75" Y="2.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utils\MonoUtils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Utils.SocketUtils">
+    <Position X="21.75" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAIAAAAAAAgAIAAAAAAACAAAAEAAAA=</HashCode>
+      <FileName>Utils\SocketUtils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Utils.TcpTransmitter">
+    <Position X="16.5" Y="4.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>ACgAAACAAAAAAABIQAAAAQAAgAAAAIAAABAABAEAAAQ=</HashCode>
+      <FileName>Utils\TcpTransmitter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Checksum.Crc32">
+    <Position X="6.25" Y="8.25" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="nettools.Cryptography.Checksum.Crc32.Crc32Algorithm">
+        <TypeIdentifier>
+          <NewMemberFileName>Cryptography\Checksum\Crc32.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Checksum\Crc32.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Checksum.Crc64">
+    <Position X="8.75" Y="8.25" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="nettools.Cryptography.Checksum.Crc64.Crc64Algorithm">
+        <TypeIdentifier>
+          <NewMemberFileName>Cryptography\Checksum\Crc64.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="nettools.Cryptography.Checksum.Crc64.Crc64Iso">
+        <TypeIdentifier>
+          <NewMemberFileName>Cryptography\Checksum\Crc64.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Checksum\Crc64.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Checksum.HashCode64">
+    <Position X="6.25" Y="14.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Checksum\HashCode64.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Hashing.MD5">
+    <Position X="11.5" Y="8.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Hashing\MD5.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Hashing.RIPEMD160">
+    <Position X="11.5" Y="9.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Cryptography\Hashing\RIPEMD160.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Hashing.SHA1">
+    <Position X="11.5" Y="11.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Hashing\SHA1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Hashing.SHA256">
+    <Position X="11.5" Y="12.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Hashing\SHA256.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Hashing.SHA384">
+    <Position X="11.5" Y="14.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Hashing\SHA384.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Symmetric.Aes">
+    <Position X="14.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>Cryptography\Symmetric\Aes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Hashing.SHA512">
+    <Position X="11.5" Y="15.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Hashing\SHA512.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Symmetric.Des">
+    <Position X="14.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Cryptography\Symmetric\Des.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Symmetric.RC2">
+    <Position X="14.75" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Symmetric\RC2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Symmetric.Rijndael">
+    <Position X="14.75" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Symmetric\Rijndael.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Symmetric.TripleDes">
+    <Position X="14.75" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Symmetric\TripleDes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="nettools.Configuration.IConfiguration">
+    <Position X="19.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgIAAIAAAAgAAAAAABAAAAAgAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Configuration\IConfiguration.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="nettools.Core.ICommand">
+    <Position X="3.75" Y="8" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAIAAQAAAAAAAAAAAAAAAAAAQAAAAAACAA=</HashCode>
+      <FileName>Core\ICommand.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="nettools.Plugins.IPlugin">
+    <Position X="2" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAgAAAAgACAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Plugins\IPlugin.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="nettools.Plugins.IPluginCommand">
+    <Position X="3.75" Y="10.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Plugins\IPluginCommand.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="nettools.Core.LogMethod">
+    <Position X="19.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAIAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Core\Logger.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="nettools.Core.LogPriority">
+    <Position X="21.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAYAAAAAAABAAAAAAAAAAAABAAEAAAAA=</HashCode>
+      <FileName>Core\Logger.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="nettools.Plugins.PluginLanguage">
+    <Position X="23.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Plugins\PluginLanguage.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

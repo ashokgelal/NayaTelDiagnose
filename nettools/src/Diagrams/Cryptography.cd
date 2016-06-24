@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="nettools.Cryptography.Checksum.Crc32">
+    <Position X="0.5" Y="0.5" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="nettools.Cryptography.Checksum.Crc32.Crc32Algorithm">
+        <TypeIdentifier>
+          <NewMemberFileName>Cryptography\Checksum\Crc32.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Checksum\Crc32.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Checksum.Crc64">
+    <Position X="3" Y="0.5" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="nettools.Cryptography.Checksum.Crc64.Crc64Algorithm">
+        <TypeIdentifier>
+          <NewMemberFileName>Cryptography\Checksum\Crc64.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="nettools.Cryptography.Checksum.Crc64.Crc64Iso">
+        <TypeIdentifier>
+          <NewMemberFileName>Cryptography\Checksum\Crc64.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Checksum\Crc64.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Checksum.HashCode64">
+    <Position X="5.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Checksum\HashCode64.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Hashing.MD5">
+    <Position X="8" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Hashing\MD5.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Hashing.RIPEMD160">
+    <Position X="10.5" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Cryptography\Hashing\RIPEMD160.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Hashing.SHA1">
+    <Position X="13.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Hashing\SHA1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Hashing.SHA256">
+    <Position X="8" Y="2" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Hashing\SHA256.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Hashing.SHA384">
+    <Position X="10.5" Y="2" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Hashing\SHA384.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Hashing.SHA512">
+    <Position X="13.5" Y="2" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Hashing\SHA512.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Symmetric.Aes">
+    <Position X="8" Y="4" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>Cryptography\Symmetric\Aes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Symmetric.Des">
+    <Position X="10.5" Y="4" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Cryptography\Symmetric\Des.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Symmetric.RC2">
+    <Position X="13.5" Y="4" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Symmetric\RC2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Symmetric.Rijndael">
+    <Position X="8" Y="5.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Symmetric\Rijndael.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="nettools.Cryptography.Symmetric.TripleDes">
+    <Position X="10.5" Y="5.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Cryptography\Symmetric\TripleDes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

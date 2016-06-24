@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D363E0AE-9368-4E84-A715-0AB1473914B1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DiagnoseAll</RootNamespace>
+    <AssemblyName>DiagnoseAll</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Practices.Prism.Composition, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Composition.5.0.0\lib\NET45\Microsoft.Practices.Prism.Composition.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.SharedInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Composition.5.0.0\lib\NET45\Microsoft.Practices.Prism.SharedInterfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Prism, Version=6.1.0.0, Culture=neutral, PublicKeyToken=91a96d2a154366d8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Core.6.1.0\lib\net45\Prism.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Prism.Mef.Wpf, Version=6.1.0.0, Culture=neutral, PublicKeyToken=91a96d2a154366d8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Mef.6.1.0\lib\net45\Prism.Mef.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Prism.Wpf, Version=6.1.0.0, Culture=neutral, PublicKeyToken=91a96d2a154366d8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Wpf.6.1.0\lib\net45\Prism.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Controls.Layout.Toolkit.VisualStudio.Design, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DiagnoseAllModule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DiagnoseAllNavigationItemView.xaml.cs">
+      <DependentUpon>DiagnoseAllNavigationItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DiagnoseAllView.xaml.cs">
+      <DependentUpon>DiagnoseAllView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ActivateUsersModule\ActivateUsersModule.csproj">
+      <Project>{dc505de0-6f38-44c7-9514-ff5c3ea0054e}</Project>
+      <Name>ActivateUsersModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataUsageModule\DataUsageModule.csproj">
+      <Project>{ad5a47a2-8b9e-4553-9c30-8d01a9609c79}</Project>
+      <Name>DataUsageModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkResponseModule\NetworkResponseModule.csproj">
+      <Project>{e4adeac7-c3dd-4902-8273-03131a56e597}</Project>
+      <Name>NetworkResponseModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpeedTestModule\SpeedTestModule.csproj">
+      <Project>{4bf78326-2a93-4c03-9784-7b77e4968681}</Project>
+      <Name>SpeedTestModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VerifyConnectivityModule\VerifyConnectivityModule.csproj">
+      <Project>{e8224caf-e17e-4fa7-b483-7b90cd191e76}</Project>
+      <Name>VerifyConnectivityModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ViewSwitchingNavigation.Infrastructure\ViewSwitchingNavigation.Infrastructure.csproj">
+      <Project>{55aa526e-1a89-4a8e-b648-8de5de2fd1e5}</Project>
+      <Name>ViewSwitchingNavigation.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WifiInspectorModule\WifiInspectorModule.csproj">
+      <Project>{c5035504-07a5-462c-80f2-b0f7a2172ef6}</Project>
+      <Name>WifiInspectorModule</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\DiagnoseAllNavigationItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DiagnoseAllView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\diagnose_all.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\active_user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\active_user_active.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\arrow_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\arrow_up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\diagnose_all.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\network_response.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\network_response_active.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\speed_test.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\speed_test_active.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\usage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\usage_active.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\verify.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\verify_active.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\wif_inspector.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\wif_inspector_active.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="SpeedTestModule.Views.SpeedTestNavigationItemView"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" 
+      >
+   
+    <RadioButton  x:Name="navigateRadioButton"  Style="{StaticResource MainViewRadioButtonStyle}" GroupName="MainNavigation" Click="navigateRadioButton_Click"   AutomationProperties.AutomationId="EmailRadioButton" MouseEnter="navigateRadioButton_MouseEnter" MouseLeave="navigateRadioButton_MouseLeave">
+          <StackPanel Orientation="Horizontal" Height="50"  >
+                <Image x:Name="navigateImage" Width="30" Source="../Images/in_active_radio.png" Margin="2,0,0,0" Height="30" Stretch="Fill"/>
+
+
+                <TextBlock x:Name="NavigateTextBlock" TextWrapping="Wrap" Text="Speed Test" Width="189.33"   Margin="10,0,0,0"  VerticalAlignment="Center"/>
+        </StackPanel>
+    </RadioButton>
+   
+
+</UserControl>
