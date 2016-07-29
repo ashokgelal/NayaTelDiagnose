@@ -6,11 +6,12 @@ using System.Windows.Controls;
 using Prism.Regions;
 using ViewSwitchingNavigation.Infrastructure;
 using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace SpeedTestModule.Views
 {
     [Export]
-    [ViewSortHint("03")]
+    [ViewSortHint("02")]
     public partial class SpeedTestNavigationItemView : UserControl, IPartImportsSatisfiedNotification , IDiagnoseAllService
     {
         private static Uri ViewUri = new Uri("/IntertnetSpeedTestView", UriKind.Relative);
@@ -68,20 +69,28 @@ namespace SpeedTestModule.Views
 
         private void navigateRadioButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-             Uri ImageUri = new Uri("../Images/active_radio.png", UriKind.Relative);
+            ShortTextBlock.Foreground = (Brush)Application.Current.MainWindow.FindResource("BrushShortDiscriptionIn");
+
+            Uri ImageUri = new Uri("../Images/active_radio.png", UriKind.Relative);
 
               this.navigateImage.Source = new BitmapImage(ImageUri);
         }
 
         private void navigateRadioButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            ShortTextBlock.Foreground = (Brush)Application.Current.MainWindow.FindResource("BrushShortDiscriptionOut");
+
             Uri ImageUri = (this.navigateRadioButton.IsChecked == true ? new Uri("../Images/active_radio.png", UriKind.Relative) : new Uri("../Images/In_active_radio.png", UriKind.Relative));
             this.navigateImage.Source = new BitmapImage(ImageUri);
 
         }
         public string getHeaderTitle()
         {
-            return "Speed Test";
+            return Constants.TEST_HEADER_TITTLE_SPEED_TEST;
+        }
+        public string getShortDescription()
+        {
+            return Constants.TEST_HEADER_SHORT_DESCRIPTION_SPEED_TEST;
         }
         public Image getImageIcone()
         {

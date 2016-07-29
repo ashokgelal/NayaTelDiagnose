@@ -11,11 +11,13 @@ namespace ViewSwitchingNavigation.Infrastructure.Events
         public enum DisplayScreen {
             TOP,
             Middle,
-            Both
+            Both,
+            Box
         }
 
         public String message;
         public String messageDescription;
+        public String messageTittle;
 
         public Boolean isError;
         public DisplayScreen displayScren;

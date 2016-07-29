@@ -10,7 +10,8 @@
 
     Title="Nayatel NDoctor" Background="{x:Null}"
          ResizeMode="NoResize"
-        Height="575" Width="1200" Loaded="Window_Loaded"
+        Height="575" Width="1200" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" 
+     
         >
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="visibilityConverter" />
@@ -30,7 +31,7 @@
             </Image>
 
 
-            <Button x:Name="NavigateToDaignoseAllRadioButton"  Click="NavigateToDaignoseAllRadioButton_Click"     HorizontalAlignment="Center"  VerticalAlignment="Bottom" Width="219.02" Height="34.84" Background="#3c83c5" FontSize="14" Foreground="White" BorderThickness="0" Grid.Column="1" BorderBrush="{x:Null}" Content=" Diagnose All">
+            <Button x:Name="NavigateToDaignoseAllRadioButton"  Click="NavigateToDaignoseAllRadioButton_Click"  MouseEnter="NavigateToDaignoseAllRadioButton_MouseEnter" MouseLeave="NavigateToDaignoseAllRadioButton_MouseLeave" HorizontalAlignment="Center"  VerticalAlignment="Bottom" Width="219.02" Height="34.84" Background="#3c83c5" FontSize="14" Foreground="White" BorderThickness="0" Grid.Column="1" BorderBrush="{x:Null}" Content=" Diagnose All">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="Green"/>
@@ -65,12 +66,12 @@
             <!--<TextBlock    x:Name="textBlock7" HorizontalAlignment="Left"   TextWrapping="Wrap" Text="Your are connected on Internet using nayatel" d:LayoutOverrides="Height" Foreground="#FFF47025" FontSize="18" FontWeight="Bold"/>-->
             <TextBlock x:Name="textBlockHeaderMessage"   HorizontalAlignment="Left" Margin="10,19,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Height="28.96"   d:LayoutOverrides="HorizontalAlignment"  Text="(Your are connected on Internet using nayatel)" FontSize="12"  Foreground="#f4f4f4" />
         </StackPanel>
-        <Button x:Name="Resfreshbtn" Style="{StaticResource RefreshButtonStyle}" Visibility="Collapsed" Click="Resfreshbtn_Click" Width="25" Height="25" Grid.Column="1" Grid.Row="0"   Margin="800,15,30,493">
+        <Button x:Name="Resfreshbtn" Style="{StaticResource RefreshButtonStyle}" Visibility="Collapsed" Click="Resfreshbtn_Click" Width="25" Height="25" Grid.Column="1" Grid.Row="0"  Margin="845,15,20,493">
             <Button.Background>
                 <ImageBrush ImageSource="Resources/refresh_icon.png"/>
             </Button.Background>
         </Button>
-        <Image x:Name="imageIndicator"  Visibility="Collapsed" Grid.Column="1" Grid.Row="0"  Margin="850,15,10,493" HorizontalAlignment="Right"  Height="30" Width="30" gif:ImageBehavior.AnimatedSource="/NayaTelDiagnose;component/Resources/Loader3.gif" />
+        <Image x:Name="imageIndicator"  Visibility="Collapsed" Grid.Column="1" Grid.Row="0"  Margin="845,15,20,493" HorizontalAlignment="Right"  Height="28" Width="30" gif:ImageBehavior.AnimatedSource="/NayaTelDiagnose;component/Resources/Loader3.gif" />
 
         <StackPanel Grid.Column="1" Grid.Row="1" Margin="5,63,5,0"  >
 
@@ -85,10 +86,13 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <ContentControl  Grid.Row="0" Name="MainContentRegion" prism:RegionManager.RegionName="MainContentRegion"/>
+                    <StackPanel Name="StackMainContentRegion" >
+                        <ContentControl  Grid.Row="0" Name="MainContentRegion" prism:RegionManager.RegionName="MainContentRegion"/>
+
+                    </StackPanel>
 
                     <StackPanel Name="StackDaignoseAll" Grid.Row="0" Visibility="Collapsed" Orientation="Vertical"          />
-                    <Border x:Name="borderBlockMiddleMessage"  Visibility="Collapsed"  BorderBrush="Gray" Opacity="0.85" BorderThickness="1" Height="50" Width="800" Margin="0,5,0,0" >
+                    <Border x:Name="borderBlockMiddleMessage" Visibility="Collapsed"   BorderBrush="Gray" Opacity="0.85" BorderThickness="1" Height="50"   Margin="5" >
                         <Border.OpacityMask>
                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                 <GradientStop Color="Black" Offset="0"/>
@@ -104,7 +108,7 @@
                             </LinearGradientBrush>
                         </Border.Background>
 
-                        <TextBlock x:Name="textBlockMiddleMessage" Margin="2" Visibility="Visible" HorizontalAlignment="Center"  TextWrapping="Wrap" VerticalAlignment="Center"   Text="hhhhhhhhhhhhhh" FontSize="16" FontStyle="Italic"  />
+                        <TextBlock x:Name="textBlockMiddleMessage" Margin="5" Visibility="Visible" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Center"   Text=" " FontSize="16"   TextAlignment="Center"  />
 
                     </Border>
 

@@ -6,11 +6,12 @@ using System.Windows.Controls;
 using Prism.Regions;
 using ViewSwitchingNavigation.Infrastructure;
 using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace NetworkResponseModule.Views
 {
     [Export]
-    [ViewSortHint("07")]
+    [ViewSortHint("06")]
     public partial class NetworkResponseNavigationItemView : UserControl, IPartImportsSatisfiedNotification ,IDiagnoseAllService
     {
         private static Uri ViewUri = new Uri("/NetworkResponseView", UriKind.Relative);
@@ -77,6 +78,8 @@ namespace NetworkResponseModule.Views
 
         private void navigateRadioButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            ShortTextBlock.Foreground = (Brush)Application.Current.MainWindow.FindResource("BrushShortDiscriptionIn");
+
             Uri ImageUri = new Uri("../Images/active_radio.png", UriKind.Relative);
 
             this.navigateImage.Source = new BitmapImage(ImageUri);
@@ -84,6 +87,8 @@ namespace NetworkResponseModule.Views
 
         private void navigateRadioButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            ShortTextBlock.Foreground = (Brush)Application.Current.MainWindow.FindResource("BrushShortDiscriptionOut");
+
             Uri ImageUri = (this.navigateRadioButton.IsChecked == true ? new Uri("../Images/active_radio.png", UriKind.Relative) : new Uri("../Images/In_active_radio.png", UriKind.Relative));
             this.navigateImage.Source = new BitmapImage(ImageUri);
 
@@ -91,10 +96,13 @@ namespace NetworkResponseModule.Views
      
     public string getHeaderTitle()
     {
-        return "Network Response";
+        return Constants.TEST_HEADER_TITTLE_NETWORK_RESPONSE;
     }
-
-    public Image getImageIcone()
+        public string getShortDescription()
+        {
+            return Constants.TEST_HEADER_SHORT_DESCRIPTION_NETWORK_RESPONSE;
+        }
+        public Image getImageIcone()
     {
             Uri ImageUri = new Uri("/NetworkResponseModule;component/Resources/network_response.png", UriKind.Relative);
             Image image = new Image();

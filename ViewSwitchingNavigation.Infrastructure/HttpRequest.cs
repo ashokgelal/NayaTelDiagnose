@@ -37,12 +37,24 @@ namespace ViewSwitchingNavigation.Infrastructure
                           response = await client.GetAsync(url);
 
                     }
-                    catch (Exception ex)
+                    catch (TaskCanceledException ex)
                     {
+                        if (ex.CancellationToken == cts.Token)
+                        {
+                            // a real cancellation, triggered by the caller
+                            status = "-600";
+                            return new Tuple<String, String, String>(status, wan_ip, msg);
 
-                        status = "-700";
-                        return new Tuple<String, String, String>(status, wan_ip, msg);
-                    }
+                        }
+                        else
+                        {
+                            status = "-700";
+                            return new Tuple<String, String, String>(status, wan_ip, msg);
+
+                            // a web request timeout (possibly other things!?)
+                        }
+                    }//catch
+                    
 
                     if (response.IsSuccessStatusCode)
                     {

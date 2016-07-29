@@ -17,6 +17,11 @@ using ViewSwitchingNavigation.Infrastructure;
 using Prism.Events;
 using System.Collections.Generic;
 using ViewSwitchingNavigation.Infrastructure.Events;
+using CoreLibrary;
+using System.Net;
+using System.Net.NetworkInformation;
+using ViewSwitchingNavigation.Infrastructure.Utils;
+using System.Diagnostics;
 
 namespace SpeedTestModule.ViewModels
 {
@@ -41,7 +46,23 @@ namespace SpeedTestModule.ViewModels
         System.Timers.Timer upTimer;
         System.Timers.Timer downTimer;
         PropertyProvider.WindowsMethod CurrentTestMethod;
+        Boolean isActiveUserFound = false;
+        private bool _ActiveUserMessageBoxHide;
+        public bool ActiveUserMessageBoxHide
+        {
+            get { return _ActiveUserMessageBoxHide; }
 
+            set { SetProperty(ref _ActiveUserMessageBoxHide, value); }
+        }
+
+        private String _textBlockMiddleMessage;
+        public String textBlockMiddleMessage
+        {
+            get { return _textBlockMiddleMessage; }
+
+            set { SetProperty(ref _textBlockMiddleMessage, value); }
+        }
+        
         [ImportingConstructor]
         public SpeedTestViewModel(ISpeedTestService speedTestService, IRegionManager regionManager, IEventAggregator eventAggregator)
         {
@@ -56,7 +77,7 @@ namespace SpeedTestModule.ViewModels
             this.eventAggregator = eventAggregator;
             CurrentTestMethod = PropertyProvider.WindowsMethod.SpeedTest;
             this.eventAggregator.GetEvent<TestRestartTestEvent>().Subscribe(this.restartTest, ThreadOption.UIThread);
-
+            textBlockMiddleMessage = Constants.MESSAGE_SPEED_TEST_ACTIVE_USER;
         }
         private void restartTest(PropertyProvider.WindowsMethod currentTest)
         {
@@ -74,7 +95,22 @@ namespace SpeedTestModule.ViewModels
 
         private void Initialize(int timeout)
         {
+            ActiveUserOnNetwork NetworkUser = new ActiveUserOnNetwork();
+            Dictionary<IPAddress, PhysicalAddress> all = NetworkUser.GetAllDevicesOnLAN();
+            IPAddress localIp = IPAddress.Parse(UtilNetwork.GetLocalIPAddress());
+            all.Remove(localIp);
+            List<IPAddress> GatwayList = UtilNetwork.GetDefualtWayIpAddress();
+            foreach (var item in GatwayList)
+            {
+                all.Remove(item);
 
+            }
+
+            if (all.Count > 0)
+            {
+                isActiveUserFound = true;
+            }
+            this.ActiveUserMessageBoxHide = isActiveUserFound;
             downTimer = new System.Timers.Timer(timeout);
             downTimer.Elapsed += (s, e) =>
             {
@@ -97,7 +133,7 @@ namespace SpeedTestModule.ViewModels
                 downloadBarInvoker.DoWork += delegate
             {
                 isStop = false;
-                Thread.Sleep(TimeSpan.FromSeconds(1));
+                
                 this.speedTestService.downloadSpeedFile((SpeedTestDownload speed) =>
                 {
 
@@ -176,9 +212,7 @@ namespace SpeedTestModule.ViewModels
                 {
                     Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
                     {
-                        if (isStop) {
-                            return;
-                        }
+                       
 
                         if (speedTestUploadCollection.Count > 0)
                         {
@@ -190,7 +224,7 @@ namespace SpeedTestModule.ViewModels
                             speedTestUploadCollection.Add(speed);
 
                         }
-                        if (speed.IsCompleted)
+                        if (speed.IsCompleted && !isStop) 
                         {
                             if (upTimer != null) {
                                 upTimer.Stop();
@@ -239,14 +273,19 @@ namespace SpeedTestModule.ViewModels
         }
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-
+            
             Dispose();
         }
 
         public void cancelTest()
         {
             isStop = true;
-
+            if (upTimer != null)
+            {
+                upTimer.Stop();
+                upTimer.Close();
+                upTimer.Dispose();
+            }
             speedTestService.stopSpeedtest();
 
             if (downloadBarInvoker != null)
@@ -316,22 +355,24 @@ namespace SpeedTestModule.ViewModels
         {
               String table = ""
 
-
+                  
                             +Constants.HTML_START_TABLE +
 
                              Constants.HTML_START_TR +
-                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Active User") +
-                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Download Speed") +
-                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Upload Speed") +
+                             Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Active User") +
+                             Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, isActiveUserFound?"YES":"NO") +
+                             Constants.HTML_END_TR+Constants.HTML_START_TR +
+                              Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Upload Speed") +
+                             Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, speedTestUploadCollection.ElementAt(0).Upload) +
+
+                             Constants.HTML_END_TR + Constants.HTML_START_TR +
+                               Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Download Speed") +
+                             Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, speedTestDownloadCollection.ElementAt(0).Download) +
+
                              Constants.HTML_END_TR;
 
- 
-
-            table += Constants.HTML_START_TR +
-            Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Pending") +
-            Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, speedTestDownloadCollection.ElementAt(0).Download) +
-            Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, speedTestUploadCollection.ElementAt(0).Upload) +
-            Constants.HTML_END_TR;  
+            
+                      
             table += Constants.HTML_END_TABLE;
 
             return table;
@@ -343,6 +384,10 @@ namespace SpeedTestModule.ViewModels
             //user info like mac ip email getUserHTMLTable
 
             return TittleTable;
+        }
+        public override string getTestTittle()
+        {
+            return Constants.TEST_HEADER_TITTLE_SPEED_TEST;
         }
     }
 }

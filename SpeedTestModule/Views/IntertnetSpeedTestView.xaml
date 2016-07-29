@@ -5,11 +5,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:infrastructure="clr-namespace:ViewSwitchingNavigation.Infrastructure;assembly=ViewSwitchingNavigation.Infrastructure" 
-
+   
     mc:Ignorable="d"      >
 
     <UserControl.Resources>
- 
+        <infrastructure:TextBlockInfo x:Key="Helper" />
+        <BooleanToVisibilityConverter x:Key="visibilityConverter" />
         <Style x:Key="EmailListContainerStyle" TargetType="ListBoxItem" BasedOn="{StaticResource DefaultListBoxItemStyle}">
             <Setter Property="Padding" Value="0"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -77,7 +78,18 @@
 
  
         <StackPanel>
-            <ListBox x:Name="ListBox"
+
+
+        <Border x:Name="borderBlockMiddleMessage" Visibility="{Binding ActiveUserMessageBoxHide, Converter={StaticResource visibilityConverter}}" Background="{StaticResource ListViewOddBrush}"  BorderBrush="Gray" Opacity="0.85" BorderThickness="0" Height="50"   Margin="5" >
+
+
+
+            <TextBlock x:Name="textBlockMiddleMessage" Margin="5" Visibility="Visible" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Center"    Text="{Binding  textBlockMiddleMessage}"     Style="{StaticResource HeadingValueLabelStyle}"   TextAlignment="Left"  />
+
+        </Border>
+
+
+        <ListBox x:Name="ListBox"
                  ItemsSource="{Binding SpeedTestDownloadCollectionView}" 
                  ItemTemplate="{StaticResource ListTemplate}"
                  ItemContainerStyle="{StaticResource EmailListContainerStyle}"

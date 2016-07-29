@@ -9,7 +9,7 @@ namespace DataUsageModule.Services
 {
     public interface IDataUsageService
     {
-        DataUsage GetDataUsageAsync();
+        DataUsage GetDataUsageAsync(int seconds);
         void clearDataUsage();
     }
         

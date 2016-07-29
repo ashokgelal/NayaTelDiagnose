@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using ViewSwitchingNavigation.Infrastructure.Events;
 using System.IO;
 using System.Web.UI;
+using System.Threading;
+using ViewSwitchingNavigation.Infrastructure.Utils;
 
 namespace VerifyConnectivityModule.ViewModels
 {
@@ -41,6 +43,7 @@ namespace VerifyConnectivityModule.ViewModels
         [ImportingConstructor]
         public VerifyConectivityViewModel(IVerifyConectivityService verifyConectivityService, IRegionManager regionManager , IEventAggregator eventAggregator)
         {
+
              
             this.verifyConectivityCollection = new ObservableCollection<VerifyConectivity>();
             this.VerifyConectivityView = new ListCollectionView(this.verifyConectivityCollection);
@@ -51,7 +54,7 @@ namespace VerifyConnectivityModule.ViewModels
             this.eventAggregator = eventAggregator;
             CurrentTestMethod = PropertyProvider.WindowsMethod.VerifyConnectivity;
             this.eventAggregator.GetEvent<TestRestartTestEvent>().Subscribe(this.restartTest, ThreadOption.UIThread);
-
+            
         }
         private void restartTest(PropertyProvider.WindowsMethod currentTest)
         {
@@ -68,6 +71,9 @@ namespace VerifyConnectivityModule.ViewModels
 
         private async Task Initialize(int timeout)
         {
+            // GoogleAnalyticsApi.TrackEvent("verifyConectivityService", "action", "label");
+
+            
             var tuple = PropertyProvider.getPropertyProvider().getTestTimeout(PropertyProvider.WindowsMethod.VerifyConnectivity, PropertyProvider.TestType.Individual);
               isStopTest = false;
 
@@ -236,9 +242,8 @@ namespace VerifyConnectivityModule.ViewModels
 
         public override Boolean IsEmail()
         {
-            if (testType == PropertyProvider.TestType.DiagnoseAll)
-                return false;
-            return true; ;
+            
+            return false; ;
 
         }
 
@@ -262,6 +267,10 @@ namespace VerifyConnectivityModule.ViewModels
             //user info like mac ip email getUserHTMLTable
 
             return TittleTable;
+        }
+        public override string getTestTittle()
+        {
+            return Constants.TEST_HEADER_TITTLE_CONNECTIVITY;
         }
     }
 }

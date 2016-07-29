@@ -6,11 +6,12 @@ using System.Windows.Controls;
 using Prism.Regions;
 using ViewSwitchingNavigation.Infrastructure;
 using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace VerifyConnectivityModule.Views
 {
     [Export]
-    [ViewSortHint("02")]
+    [ViewSortHint("01")]
     public partial class VerifyConnectivityNavigationItemView : UserControl, IPartImportsSatisfiedNotification, IDiagnoseAllService
     {
         public static Uri ViewUri = new Uri("/VerifyConnectivityView", UriKind.Relative);
@@ -70,20 +71,25 @@ namespace VerifyConnectivityModule.Views
             Uri ImageUri = new Uri("../Images/active_radio.png", UriKind.Relative);
 
             this.navigateImage.Source = new BitmapImage(ImageUri);
+            ShortTextBlock.Foreground = (Brush)Application.Current.MainWindow.FindResource("BrushShortDiscriptionIn");
         }
 
         private void navigateRadioButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Uri ImageUri = (this.navigateRadioButton.IsChecked == true ? new Uri("../Images/active_radio.png", UriKind.Relative) : new Uri("../Images/In_active_radio.png", UriKind.Relative));
             this.navigateImage.Source = new BitmapImage(ImageUri);
+            ShortTextBlock.Foreground = (Brush)Application.Current.MainWindow.FindResource("BrushShortDiscriptionOut");
 
         }
 
         public string getHeaderTitle()
         {
-            return "VerifyConectivity";
+            return Constants.TEST_HEADER_TITTLE_CONNECTIVITY;
         }
-
+        public string getShortDescription()
+        {
+            return Constants.TEST_HEADER_SHORT_DESCRIPTION_CONNECTIVITY;
+        }
         public Image getImageIcone()
         {
             Uri ImageUri = new Uri("/VerifyConnectivityModule;component/Resources/verify.png", UriKind.Relative);

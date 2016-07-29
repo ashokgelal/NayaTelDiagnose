@@ -15,6 +15,19 @@ namespace ViewSwitchingNavigation.Infrastructure
         private JToken confJson;
         private JToken vendorConfJson;
         private JToken userConfJson;
+      public  struct MTR_Config_Values
+        {
+           public  int Default;
+            public int Min;
+            public int Max;
+
+        }
+
+        public struct hop_discovery_Timout
+        {
+            public float Default;
+            public float custom;
+        }
 
         public enum WindowsMethod
         {
@@ -53,39 +66,72 @@ namespace ViewSwitchingNavigation.Infrastructure
             }
             return _propertyProvider;
         }
-        public int  getMTRProperty(NetworkResponse key) {
-            int result = 0;
+
+
+        public int getMTRMaxTtL()
+        {
+           return confJson.Value<JToken>("network_response").Value<int>("max_ttl");
+        }
+
+        public hop_discovery_Timout hopDiscovery( )
+        {
+            hop_discovery_Timout mtr = new hop_discovery_Timout();
+
+            mtr.Default = (confJson.Value<JToken>("network_response").Value<JToken>("hop_discovery").Value<JToken>("default").Value<float>("timeout") * 1000);
+            mtr.custom = confJson.Value<JToken>("network_response").Value<JToken>("hop_discovery").Value<JToken>("custom").Value<int>("timeout") * 1000;
+
+
+            return mtr;
+        }
+
+        public MTR_Config_Values  getMTRProperty(NetworkResponse key) {
+             MTR_Config_Values mtr = new MTR_Config_Values();
             switch (key)
             {
-                case NetworkResponse.MAX_TTL:
-                    result = confJson.Value<JToken>("network_response").Value<int>("max_ttl");
-
-                    break;
+                 
                 case NetworkResponse.IterationInterval:
-                    result = confJson.Value<JToken>("network_response").Value<int>("iteration_interval");
+                    {
+ 
+                        mtr.Default = confJson.Value<JToken>("network_response").Value<JToken>("iteration_interval").Value<int>("default");
+                        mtr.Min = confJson.Value<JToken>("network_response").Value<JToken>("iteration_interval").Value<int>("min");
+                        mtr.Max = confJson.Value<JToken>("network_response").Value<JToken>("iteration_interval").Value<int>("max");
+
+
+                    }
 
                     break;
                 case NetworkResponse.IterationsPerHost:
-                    result = confJson.Value<JToken>("network_response").Value<int>("iterations_per_host");
+                    {
+                        mtr.Default = confJson.Value<JToken>("network_response").Value<JToken>("iterations_per_host").Value<int>("default");
+                        mtr.Min = confJson.Value<JToken>("network_response").Value<JToken>("iterations_per_host").Value<int>("min");
+                        mtr.Max = confJson.Value<JToken>("network_response").Value<JToken>("iterations_per_host").Value<int>("max");
+
+
+                    }
 
                     break;
                 case NetworkResponse.PacketSize:
-                    result = confJson.Value<JToken>("network_response").Value<int>("packet_size");
+                    { 
+                        mtr.Default = confJson.Value<JToken>("network_response").Value<JToken>("packet_size").Value<int>("default");
+                        mtr.Min = confJson.Value<JToken>("network_response").Value<JToken>("packet_size").Value<int>("min");
+                        mtr.Max = confJson.Value<JToken>("network_response").Value<JToken>("packet_size").Value<int>("max");
+
+                    }
 
                     break;
                 default:
                     break;
             }
-            return result;
+            return mtr;
         }
         private void loadTestConfJson()
         {
 
-            JObject configJson = HttpRequest.getConfigJSon();
+            //JObject configJson = HttpRequest.getConfigJSon();
 
-            if (configJson != null) {
-                System.IO.File.WriteAllText(Constants.CONFIG_NAYATEL_FILE, configJson.ToString());
-            }
+            //if (configJson != null) {
+            //    System.IO.File.WriteAllText(Constants.CONFIG_NAYATEL_FILE, configJson.ToString());
+           // }
 
 
 

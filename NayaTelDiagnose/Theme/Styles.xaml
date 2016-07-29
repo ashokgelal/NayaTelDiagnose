@@ -13,8 +13,11 @@
     <SolidColorBrush x:Key="PrimaryBrush_FG" Color="{StaticResource PRIMARY_BUTTON_MENUE_FG}" />
     <SolidColorBrush x:Key="PrimaryBrush_CHECKED_BG" Color="{StaticResource PRIMARY_BUTTON_MENUE_CHECKED_BG}" />
     <SolidColorBrush x:Key="PrimaryBrush_CHECKED_FG" Color="{StaticResource PRIMARY_BUTTON_MENUE_CHECKED_FG}" />
+    <SolidColorBrush x:Key="BrushShortDiscriptionIn">#EEEEEE</SolidColorBrush>
+    <SolidColorBrush x:Key="BrushShortDiscriptionOut">#ff777777</SolidColorBrush>
+    <SolidColorBrush x:Key="DiagnoseBrush_BG" Color="#3c83c5" />
 
-   
+     
 
     <Style x:Key="MainViewRadioButtonStyle" TargetType="ToggleButton">
         
@@ -25,6 +28,7 @@
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="FontFamily" Value="Yu Gothic UI Semibold"/>
         <Setter Property="BorderBrush" Value="#FF204d89" />
+        
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">

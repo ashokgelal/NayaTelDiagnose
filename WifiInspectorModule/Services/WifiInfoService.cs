@@ -18,31 +18,54 @@ namespace WifiInspectorModule.Services
     [Export(typeof(IWifiInfoService))]
     class WifiInfoService : IWifiInfoService
     {
+
+          /// <summary>
+        /// Supported 2.4Ghz 5Ghz  family list
+        /// </summary>
+        /// 
+        String[] SUPPORTED_CHANNELS_5_GHZ = new string[] {"802.11b", "802.11n" , "802.11ac" };
+        String[] SUPPORTED_CHANNELS_2_5_GHZ = new string[] { "802.11a", "802.11g", "802.11n" };
+
+
         private IEnumerable<WifiInfo> getWifiList()
         {
 
 
 
             WlanClient client = new WlanClient();
-            List<WifiInfo> wifiInfoList = new List<WifiInfo>();
+            List<WifiInfo> wifiConeectedInfoList = new List<WifiInfo>();
+
             List<String> slistMac = new List<string>();
 
             try
             {
+                int count = 0;
                 foreach (WlanClient.WlanInterface wlanIface in client.Interfaces)
                 {
+                    count++;
 
+                    NetworkInterfaceType type = wlanIface.NetworkInterface.NetworkInterfaceType;
+                    //if(wlanIface.CurrentConnection.wlanConnectionMode == WlanConnect)
+                    
+                    Wlan.WlanConnectionAttributes WlanConnection;
+                    try
+                    {
+                        WlanConnection = wlanIface.CurrentConnection;
 
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
                     WifiInfo wifiInfo = new WifiInfo();
-
-                    Wlan.WlanConnectionAttributes WlanConnection = wlanIface.CurrentConnection;
-                    NetworkInterface Interface = wlanIface.NetworkInterface;
+                     NetworkInterface Interface = wlanIface.NetworkInterface;
                     GatewayIPAddressInformationCollection gateway_address = Interface.GetIPProperties().GatewayAddresses;
                     IPAddress DefualtGatewayAddress = null;
                     foreach (var address in gateway_address)
                     {
                         if (address.Address.IsIPv6LinkLocal)
                         {
+
                         }
                         else
                         {
@@ -51,6 +74,40 @@ namespace WifiInspectorModule.Services
                     }
 
                     wifiInfo.DefualtGateway = DefualtGatewayAddress.ToString();
+                    
+                    try
+                    {
+
+                        UnicastIPAddressInformationCollection UnicastIPInfoCol = Interface.GetIPProperties().UnicastAddresses;
+                        foreach (UnicastIPAddressInformation UnicatIPInfo in UnicastIPInfoCol)
+                        {
+                            if (UnicatIPInfo.Address.IsIPv6LinkLocal)
+                            {
+
+                                wifiInfo.IPv6 = UnicatIPInfo.Address.ToString();
+
+
+                            }
+                            else
+                            {
+                                wifiInfo.IPv4 = UnicatIPInfo.Address.ToString();
+                            }
+                        }
+                        wifiInfo.IPv6 = String.IsNullOrEmpty(wifiInfo.IPv6) ? "N/A" : wifiInfo.IPv6;
+                        wifiInfo.DefualtGatewayMac = GetMacAddress(DefualtGatewayAddress);
+                        wifiInfo.Speed = (Interface.Speed / 1000000) + " Mbps ";
+                        wifiInfo.RSSID = wlanIface.RSSI.ToString();
+
+                       
+                    }
+                    catch (Exception ex )
+                    {
+                      
+                      // continue;
+                    }
+
+                    
+                    wifiInfo.Channel = wlanIface.Channel.ToString();
                     byte[] macAddr = WlanConnection.wlanAssociationAttributes.dot11Bssid;
                     string tMacBSSID = "";
                     for (int i = 0; i < macAddr.Length; i++)
@@ -60,20 +117,14 @@ namespace WifiInspectorModule.Services
 
                     }
                     tMacBSSID = tMacBSSID.Substring(0, tMacBSSID.Length - 1);
-
-
-
                     wifiInfo.SSID = CleanInput(System.Text.ASCIIEncoding.ASCII.GetString(WlanConnection.wlanAssociationAttributes.dot11Ssid.SSID).ToString());
-
                     wifiInfo.Signal = WlanConnection.wlanAssociationAttributes.wlanSignalQuality.ToString() + "%";
                     wifiInfo.BSS = tMacBSSID;
                     string sMac = string.Join(":", (from z in wlanIface.NetworkInterface.GetPhysicalAddress()
                              .GetAddressBytes()
                                                     select z.ToString("X2")).ToArray());
                     wifiInfo.MAC = sMac;
-                    wifiInfo.RSSID = wlanIface.RSSI.ToString();
-                    wifiInfo.Channel = wlanIface.Channel.ToString();
-
+                    wifiInfo.Security = WlanConnection.wlanSecurityAttributes.dot11AuthAlgorithm.ToString() + "  " + WlanConnection.wlanSecurityAttributes.dot11CipherAlgorithm.ToString();
                     if (wifiInfo.BSS != null)
                     {
                         wifiInfo.Vendor = PropertyProvider.getPropertyProvider().getVendorByMacAddress(wifiInfo.BSS.Substring(0, 8).Replace(":", ""));
@@ -82,162 +133,158 @@ namespace WifiInspectorModule.Services
                     else
                     {
 
-                        wifiInfo.Vendor = "NA";
+                        wifiInfo.Vendor = "N/A";
                     }
 
-
-                    UnicastIPAddressInformationCollection UnicastIPInfoCol = Interface.GetIPProperties().UnicastAddresses;
-                    foreach (UnicastIPAddressInformation UnicatIPInfo in UnicastIPInfoCol)
-                    {
-                        if (UnicatIPInfo.Address.IsIPv6LinkLocal)
-                        {
-
-                            wifiInfo.IPv6 = UnicatIPInfo.Address.ToString();
-
-
-                        }
-                        else
-                        {
-                            wifiInfo.IPv4 = UnicatIPInfo.Address.ToString();
-                        }
-                    }
-
-
-
-
-
-                    wifiInfo.DefualtGatewayMac = GetMacAddress(DefualtGatewayAddress);
-                    wifiInfo.Speed = (Interface.Speed / 1000000) + " Mbps ";
-                    wifiInfo.Security = WlanConnection.wlanSecurityAttributes.dot11AuthAlgorithm.ToString() + "  " + WlanConnection.wlanSecurityAttributes.dot11CipherAlgorithm.ToString();
-
-                    wifiInfoList.Add(wifiInfo);
-
-
-                    Wlan.WlanAvailableNetwork[] networks = wlanIface.GetAvailableNetworkList(0);
-                    foreach (Wlan.WlanAvailableNetwork network in networks)
-                    {
-                        try
-                        {
-                            WifiInfo NWifiInfo1 = new WifiInfo();
-                            NWifiInfo1.SSID = CleanInput(System.Text.ASCIIEncoding.ASCII.GetString(network.dot11Ssid.SSID).ToString());
-                            if (wifiInfo.SSID == NWifiInfo1.SSID)
-                                continue;
-                            NWifiInfo1.Signal = network.wlanSignalQuality + "%";
-                            NWifiInfo1.Security = network.dot11DefaultAuthAlgorithm.ToString() + "  " + network.dot11DefaultCipherAlgorithm.ToString();
-
-                            wifiInfoList.Add(NWifiInfo1);
-
-                        }
-                        catch (Exception)
-                        {
-
-                            throw;
-                        }
-                      
-
-                    }
-
-
-                    Wlan.WlanBssEntry[] wlanBssEntries = wlanIface.GetNetworkBssList();
-
-                    foreach (Wlan.WlanBssEntry network in wlanBssEntries)
-                    {
-                        int rss = network.rssi;
-                        foreach (var NWifiInfo in wifiInfoList)
-                        {
-                            if (NWifiInfo.SSID == CleanInput(System.Text.ASCIIEncoding.ASCII.GetString(network.dot11Ssid.SSID).ToString()))
-                            {
-                                NWifiInfo.BSS = getMacFromBytes(network.dot11Bssid);
-                                NWifiInfo.RSSID = network.rssi.ToString();
-                                NWifiInfo.Channel = ConvertToChannel(network.chCenterFrequency).ToString();
-                               // NWifiInfo.Speed += "       Mbps :";
-                                //for (int i = 0; i < network.wlanRateSet.Rates.Count(); i++)
-                                //{
-                                //    double rate_in_mbps1 = (network.wlanRateSet.Rates[i] & 0x7FFF) * 0.5;
-                                //    NWifiInfo.Speed += ","+rate_in_mbps1;
-                                //}
-                                //NWifiInfo.Speed += "   RateSet:";
-                                //for (int i = 0; i < network.wlanRateSet.Rates.Count(); i++)
-                                //{
-                                //   // double rate_in_mbps1 = (network.wlanRateSet.Rates[i] & 0x7FFF) * 0.5;
-                                //    NWifiInfo.Speed += "," + network.wlanRateSet.Rates[i];
-                                //}
-                                //if (NWifiInfo.Speed == null)
-                                //{
-                                //    double rate_in_mbps = network.wlanRateSet.GetRateInMbps(0);
-                                //   // NWifiInfo.Speed = rate_in_mbps.ToString() + " Mbps";
-                                //}
-
-                                if (NWifiInfo.BSS != null)
-                                {
-                                    NWifiInfo.Vendor = PropertyProvider.getPropertyProvider().getVendorByMacAddress(NWifiInfo.BSS.Substring(0, 8).Replace(":", ""));
-
-                                }
-                                else
-                                {
-
-                                    NWifiInfo.Vendor = "NA";
-                                }
-
-                            }
-                        }
-
-
-
-                    }
+                    wifiConeectedInfoList.Add(wifiInfo);
                 }
             }
             catch (Exception ex)
             {
             }
 
+            wifiConeectedInfoList.AddRange(getNotConnectWifiList());
+
             /// overlapping aps
             /// 
             int countAPs = 0;
-            String ChannelConeccted = "";
-            foreach (var item in wifiInfoList)
+            List<int> removeIndex = new List<int>();
+            foreach (var item in wifiConeectedInfoList)
             {
                 if (item.DefualtGateway != null)
                 {
-                    ChannelConeccted = item.Channel;
-                    break;
-                }
-            }
-            foreach (var item in wifiInfoList)
-            {
-                if (item.DefualtGateway != null)
-                {
-                    continue;
-                }
-                else
-                {
-                    if (ChannelConeccted == item.Channel)
+                    int index = 0;
+                    foreach (var item2 in wifiConeectedInfoList)
                     {
-                        countAPs++;
+                        
+                        if (item.SSID == item2.SSID && item2.DefualtGateway == null)
+                        {
+                            
+                            removeIndex.Add(index);
+                         }
+                        index++;
+
                     }
+                    
                 }
             }
-            foreach (var item in wifiInfoList)
+
+            foreach (var item in removeIndex)
+            {
+                wifiConeectedInfoList.RemoveAt(item);
+            }
+
+            wifiConeectedInfoList = wifiConeectedInfoList.Distinct(new DistinctItemComparer()).ToList();
+            foreach (var item in wifiConeectedInfoList)
             {
                 if (item.DefualtGateway != null)
                 {
+                    //String ChannelConeccted = "";
+                    foreach (var item2 in wifiConeectedInfoList)
+                    {
+                        
+                            if (item.Channel == item2.Channel && item.SSID != item2.SSID)
+                            {
+                                countAPs++;
+                            }
+                         
+
+                    }
                     item.OverlappingAPS = countAPs.ToString();
-                    break;
+
+
                 }
             }
-            return leastCongestion(wifiInfoList);
+            
+             
+            return leastCongestion(wifiConeectedInfoList);
 
         }
 
+        //not connected wifi info
+
+        List<WifiInfo> getNotConnectWifiList()
+        {
+            List<WifiInfo> wifiNotConnectedInfoList = new List<WifiInfo>();
+
+            WlanClient client = new WlanClient();
+            foreach (WlanClient.WlanInterface wlanIface in client.Interfaces)
+            {
+                 WifiInfo wifiInfo = new WifiInfo();
+                Wlan.WlanAvailableNetwork[] networks = null;
+                try
+                {
+                    networks = wlanIface.GetAvailableNetworkList(0);
+                }
+                catch (Exception ex)
+                {
+
+                    continue;
+                }
+               
+                foreach (Wlan.WlanAvailableNetwork network in networks)
+                {
+                    try
+                    {
+                        WifiInfo NWifiInfo1 = new WifiInfo();
+                        NWifiInfo1.SSID = CleanInput(System.Text.ASCIIEncoding.ASCII.GetString(network.dot11Ssid.SSID).ToString());
+                        //if (wifiInfo.SSID == NWifiInfo1.SSID)
+                        // continue;
+                        NWifiInfo1.Signal = network.wlanSignalQuality + "%";
+                        NWifiInfo1.Security = network.dot11DefaultAuthAlgorithm.ToString() + "  " + network.dot11DefaultCipherAlgorithm.ToString();
+
+                        wifiNotConnectedInfoList.Add(NWifiInfo1);
+
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+
+
+                }
+
+
+                Wlan.WlanBssEntry[] wlanBssEntries = wlanIface.GetNetworkBssList();
+
+                foreach (Wlan.WlanBssEntry network in wlanBssEntries)
+                {
+                    int rss = network.rssi;
+                    foreach (var NWifiInfo in wifiNotConnectedInfoList)
+                    {
+                        if (NWifiInfo.SSID == CleanInput(System.Text.ASCIIEncoding.ASCII.GetString(network.dot11Ssid.SSID).ToString()))
+                        {
+                            NWifiInfo.BSS = getMacFromBytes(network.dot11Bssid);
+                            NWifiInfo.RSSID = network.rssi.ToString();
+                            NWifiInfo.Channel = ConvertToChannel(network.chCenterFrequency).ToString();
+                            if (NWifiInfo.BSS != null)
+                            {
+                                NWifiInfo.Vendor = PropertyProvider.getPropertyProvider().getVendorByMacAddress(NWifiInfo.BSS.Substring(0, 8).Replace(":", ""));
+
+                            }
+                            else
+                            {
+
+                                NWifiInfo.Vendor = "NA";
+                            }
+
+                        }
+                    }
+
+
+
+                }
+            }
+
+
+            return wifiNotConnectedInfoList;
+        }
         List<WifiInfo> leastCongestion(List<WifiInfo> wifiInfoList)
         {
 
             int[] PTA_APPROVED_CHANNELS_5_GHZ = new int[] { 149, 153, 157, 161, 165, 169, 173, 177 };
-
             List<WifiInfo> List_LC_5_GHZ = new List<WifiInfo>();
-
-
-
             foreach (var item in wifiInfoList)
             {
                 int signal = int.Parse(item.Signal.Replace("%", ""));
@@ -534,6 +581,26 @@ namespace WifiInspectorModule.Services
                     .FirstOrDefault();
             if (gateway_address == null) return null;
             return gateway_address.Address;
+        }
+    }
+
+
+
+    class DistinctItemComparer : IEqualityComparer<WifiInfo>
+    {
+
+        public bool Equals(WifiInfo x, WifiInfo y)
+        {
+            return x.SSID == y.SSID &&
+                x.BSS == y.BSS;
+               
+        }
+
+        public int GetHashCode(WifiInfo obj)
+        {
+            return obj.SSID.GetHashCode() ^
+                obj.BSS.GetHashCode()  
+                ;
         }
     }
 }

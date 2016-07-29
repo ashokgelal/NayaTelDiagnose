@@ -41,6 +41,8 @@ namespace WifiInspectorModule.ViewModels
         System.Timers.Timer upTimer;
         Boolean isStop = false;
         Boolean isEmail = false;
+      
+
 
         PropertyProvider.WindowsMethod CurrentTestMethod;
 
@@ -107,8 +109,31 @@ namespace WifiInspectorModule.ViewModels
                 String tMacBSSID = "";
                 foreach (var item in messages)
                 {
+                    String NA = "N/A";
+                    item.BSS = String.IsNullOrEmpty(item.BSS) ? NA : item.BSS;
+                    item.SSID = String.IsNullOrEmpty(item.SSID) ? NA : item.SSID;
+                    item.Channel = String.IsNullOrEmpty(item.Channel) ? NA : item.Channel;
+                    item.Signal = String.IsNullOrEmpty(item.Signal) ? NA : item.Signal;
+                    item.Vendor = String.IsNullOrEmpty(item.Vendor) ? NA : item.Vendor;
+                    item.RSSID = String.IsNullOrEmpty(item.RSSID) ? NA : item.RSSID;
+                    item.Security = String.IsNullOrEmpty(item.Security) ? NA : item.Security;
+                    item.Speed = String.IsNullOrEmpty(item.Speed) ? NA : item.Speed;
+                    item.Frequency = String.IsNullOrEmpty(item.Frequency) ? NA : item.Frequency;
+                    
+ 
+
                     if (item.IPv4 != null)
                     {
+                        item.DefualtGateway = String.IsNullOrEmpty(item.DefualtGateway) ? NA : item.DefualtGateway;
+                        item.DefualtGatewayMac = String.IsNullOrEmpty(item.DefualtGatewayMac) ? NA : item.DefualtGatewayMac;
+                        item.IPv4 = String.IsNullOrEmpty(item.IPv4) ? NA : item.IPv4;
+                        item.MAC = String.IsNullOrEmpty(item.MAC) ? NA : item.MAC;
+                        item.IPv6 = String.IsNullOrEmpty(item.IPv6) ? NA : item.IPv6;
+                        item.GHZ4 = String.IsNullOrEmpty(item.GHZ4) ? NA : item.GHZ4;
+                        item.GHZ5 = String.IsNullOrEmpty(item.GHZ5) ? NA : item.GHZ5;
+                        item.OverlappingAPS = String.IsNullOrEmpty(item.OverlappingAPS) ? NA : item.OverlappingAPS;
+
+
                         this.messagesCollection.Add(item);
                         tMacBSSID = item.BSS;
 
@@ -170,6 +195,7 @@ namespace WifiInspectorModule.ViewModels
 
         public void cancelTest()
         {
+            
             isStop = true;
             if (upTimer != null)
             {
@@ -233,23 +259,38 @@ namespace WifiInspectorModule.ViewModels
                 Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.BSS) +
                 Constants.HTML_END_TR +
 
+                Constants.HTML_START_TR +
+                Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "SSID Channel") +
+                Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.Channel) +
+                Constants.HTML_END_TR +
                  Constants.HTML_START_TR +
                 Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Default Gateway") +
                 Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.DefualtGateway) +
                 Constants.HTML_END_TR +
 
                  Constants.HTML_START_TR +
-                Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Default Gateway Mac Address") +
+                Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Default Gateway MAC Address") +
                 Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.DefualtGatewayMac) +
                 Constants.HTML_END_TR +
 
                  Constants.HTML_START_TR +
-                Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Least Congestion on 2.4Ghz") +
+                Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Signal strenght") +
+                Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.Signal) +
+                Constants.HTML_END_TR +
+
+                Constants.HTML_START_TR +
+                Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Overlapping Aps") +
+                Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.OverlappingAPS) +
+                Constants.HTML_END_TR +
+
+
+                 Constants.HTML_START_TR +
+                Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Channel with Least Congestion on 2.4Ghz") +
                 Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.GHZ4) +
                 Constants.HTML_END_TR +
 
                  Constants.HTML_START_TR +
-                Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Least Congestion on 5Ghz") +
+                Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Channel with Least Congestion on 5 Ghz") +
                 Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.GHZ5) +
                 Constants.HTML_END_TR;
 
@@ -272,15 +313,20 @@ namespace WifiInspectorModule.ViewModels
 
             //connected wifi info adding 
 
-            table += Constants.HTML_START_TR +
-           Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, ConnWifi.SSID) +
-           Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, ConnWifi.BSS) +
-           Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, ConnWifi.Vendor) +
-           Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, ConnWifi.Signal) +
-           Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, ConnWifi.Channel) +
-           Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, ConnWifi.RSSID) +
-           Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, ConnWifi.Security) +
-           Constants.HTML_END_TR;
+            //connected wifi info adding  
+            foreach (var item in messagesCollection)
+            {
+
+                table += Constants.HTML_START_TR +
+            Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.SSID) +
+            Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.BSS) +
+            Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.Vendor) +
+            Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.Signal) +
+            Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.Channel) +
+            Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.RSSID) +
+            Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, item.Security) +
+            Constants.HTML_END_TR;
+            }
 
 
             foreach (var item in nWiFiInspectorCollection)
@@ -307,6 +353,10 @@ namespace WifiInspectorModule.ViewModels
             //user info like mac ip email getUserHTMLTable
 
             return TittleTable;
+        }
+        public override string getTestTittle()
+        {
+            return Constants.TEST_HEADER_TITTLE_WIFI_INSPECTOR;
         }
     }
 

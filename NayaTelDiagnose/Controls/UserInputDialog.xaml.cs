@@ -12,15 +12,16 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ViewSwitchingNavigation.Infrastructure;
 
 namespace NayaTelDiagnose.Controls
 {
     /// <summary>
     /// Interaction logic for MyDialog.xaml
     /// </summary>
-    public partial class MyDialog : Window
+    public partial class UserInputDialog : Window
     {
-        public MyDialog()
+        public UserInputDialog()
         {
             InitializeComponent();
         }
@@ -42,29 +43,29 @@ namespace NayaTelDiagnose.Controls
             long phoneNumber;
             if (EmailAddressText.Length == 0)
             {
-                errormessage.Text = "Enter an email.";
+                errormessage.Text = Constants.MESSAGES_INPUT_ERROR_EMPTY_EMAIL;
                 EmailTextBox.Focus();
                 return;
             }
 
+           
+              if (!Regex.IsMatch(EmailTextBox.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
+            {
+                errormessage.Text = Constants.MESSAGES_INPUT_ERROR_EMPTY_INVALID_EMAIL;
+                EmailTextBox.Select(0, EmailTextBox.Text.Length);
+                EmailTextBox.Focus();
+                 return;
+
+            }
             if (PhoneNumberText.Length == 0)
             {
-                errormessage.Text = "Enter an Cell No.";
+                errormessage.Text = Constants.MESSAGES_INPUT_ERROR_EMPTY_PHONE_NUMBER;
                 PhoneNumberTextBox.Focus();
                 return;
 
             }
-              if (!Regex.IsMatch(EmailTextBox.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
-            {
-                errormessage.Text = "Enter a valid email.";
-                EmailTextBox.Select(0, EmailTextBox.Text.Length);
-                EmailTextBox.Focus();
-                DialogResult = false;
-                return;
-
-            }
-              if (PhoneNumberText.Length < 10 || PhoneNumberText.Length >15|| !long.TryParse(PhoneNumberText, out phoneNumber)) {
-                errormessage.Text = "Enter a valid Cell No.";
+            if (PhoneNumberText.Length < 10 || PhoneNumberText.Length >15|| !long.TryParse(PhoneNumberText, out phoneNumber)) {
+                errormessage.Text = Constants.MESSAGES_INPUT_ERROR_EMPTY_INVALID_PHONE_NUMBER;
                 PhoneNumberTextBox.Select(0, PhoneNumberTextBox.Text.Length);
                 PhoneNumberTextBox.Focus();
                 return;
@@ -85,6 +86,17 @@ namespace NayaTelDiagnose.Controls
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
 
+        }
+
+        private void EmailTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            errormessage.Text = "";
+
+        }
+
+        private void PhoneNumberTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            errormessage.Text = "";
         }
     }
 }

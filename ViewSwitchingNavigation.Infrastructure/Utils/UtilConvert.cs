@@ -8,6 +8,12 @@ namespace ViewSwitchingNavigation.Infrastructure.Utils
 {
      public class UtilConvert
     {
+        public static double DateTimeToUnixTimestamp(DateTime dateTime)
+        {
+            return (TimeZoneInfo.ConvertTimeToUtc(dateTime) -
+                   new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)).Milliseconds;
+        }
+
         static readonly string[] SizeSuffixes =
                   { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
         public static string SizeSuffix(Int64 value)

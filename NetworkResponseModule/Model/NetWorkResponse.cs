@@ -18,8 +18,5 @@ namespace NetworkResponseModule.Model
         public string Avg { get; set; }
         public string Worst { get; set; }
         public int Index { get; set; }
-
-
-
     }
 }

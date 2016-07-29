@@ -7,11 +7,12 @@ using Prism.Regions;
 using ViewSwitchingNavigation.Infrastructure;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
+using System.Windows.Media;
 
 namespace WifiInspectorModule.Views
 {
     [Export]
-    [ViewSortHint("05")]
+    [ViewSortHint("03")]
     public partial class WifiInspectorNavigationItemView : UserControl, IPartImportsSatisfiedNotification, IDiagnoseAllService
 
     {
@@ -71,6 +72,8 @@ namespace WifiInspectorModule.Views
 
         private void navigateRadioButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            ShortTextBlock.Foreground = (Brush)Application.Current.MainWindow.FindResource("BrushShortDiscriptionIn");
+
             BackgroundWorker barInvoker = new BackgroundWorker();
             barInvoker.WorkerSupportsCancellation = true;
             barInvoker.DoWork += delegate
@@ -87,6 +90,8 @@ namespace WifiInspectorModule.Views
         }
         private void navigateRadioButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            ShortTextBlock.Foreground = (Brush)Application.Current.MainWindow.FindResource("BrushShortDiscriptionOut");
+
             BackgroundWorker barInvoker = new BackgroundWorker();
             barInvoker.WorkerSupportsCancellation = true;
             barInvoker.DoWork += delegate
@@ -104,10 +109,13 @@ namespace WifiInspectorModule.Views
 
         public string getHeaderTitle()
         {
-            return "WiFi Inspector";
+            return Constants.TEST_HEADER_TITTLE_WIFI_INSPECTOR;
+        }
+        public string getShortDescription()
+        {
+            return Constants.TEST_HEADER_SHORT_DESCRIPTION_WIFI_INSPECTOR;
         }
 
-        
         public Image getImageIcone()
         {
             Uri ImageUri = new Uri("/WifiInspectorModule;component/Resources/wif_inspector.png", UriKind.Relative);

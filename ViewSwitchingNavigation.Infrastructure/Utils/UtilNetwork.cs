@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NativeWifi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -15,7 +16,7 @@ namespace ViewSwitchingNavigation.Infrastructure.Utils
 
         public static bool isConectedWifi() {
 
- 
+
             bool IsConnected = NetworkInterface.GetIsNetworkAvailable();
             return IsConnected;
 
@@ -57,7 +58,7 @@ namespace ViewSwitchingNavigation.Infrastructure.Utils
     .Select(i => mac.Substring(i * 2, 2)));
 
 
-            
+
             return output;
         }
         public static String GetLocalMacAddress()
@@ -68,10 +69,10 @@ namespace ViewSwitchingNavigation.Infrastructure.Utils
       select nic.GetPhysicalAddress().ToString()).FirstOrDefault();
 
 
-            return macAddr;
+            return GetMacAddress(macAddr);
         }
 
-        public static  bool   isConnectedInternet(int timeout)
+        public static bool isConnectedInternet(int timeout)
         {
             try
             {
@@ -96,10 +97,10 @@ namespace ViewSwitchingNavigation.Infrastructure.Utils
             catch (Exception)
             {
 
-                return false; 
+                return false;
             }
-                
-         }
+
+        }
 
         public static IPAddress GetSubnetMask(IPAddress address)
         {
@@ -120,24 +121,136 @@ namespace ViewSwitchingNavigation.Infrastructure.Utils
         }
         public static string GetLocalDeviceName()
         {
-            return   Environment.MachineName;
+            return Environment.MachineName;
 
         }
 
         public static string GetLocalIPAddress()
         {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList)
+
+
+
+            WlanClient client = new WlanClient();
+
+
+            var ipv4 = "";
+            int count = 0;
+            foreach (WlanClient.WlanInterface wlanIface in client.Interfaces)
             {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
+
+
+                Wlan.WlanConnectionAttributes WlanConnection;
+                try
                 {
-                    return ip.ToString();
+                    WlanConnection = wlanIface.CurrentConnection;
+                }
+                catch (Exception)
+                {
+
+                    continue;
+                }
+                count++;
+                if (count == 2)
+                    break;
+                UnicastIPAddressInformationCollection UnicastIPInfoCol = wlanIface.NetworkInterface.GetIPProperties().UnicastAddresses;
+                foreach (UnicastIPAddressInformation UnicatIPInfo in UnicastIPInfoCol)
+                {
+                    if (UnicatIPInfo.Address.IsIPv6LinkLocal)
+                    {
+
+                        // wifiInfo.IPv6 = UnicatIPInfo.Address.ToString();
+
+
+                    }
+                    else
+                    {
+                        ipv4 = UnicatIPInfo.Address.ToString();
+                    }
+                }
+
+            }
+
+            if (String.IsNullOrEmpty(ipv4)) {
+
+                foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+                {
+                    if ((ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet) && (ni.OperationalStatus == OperationalStatus.Up))
+                    {
+                        //Console.WriteLine(ni.Name);
+                        foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses)
+                        {
+                            if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                            {
+                                ipv4 = ip.Address.ToString() ;
+                            }
+                        }
+                    }
                 }
             }
-            throw new Exception("Local IP Address Not Found!");
+
+
+
+            return ipv4;
+
+            //var host = Dns.GetHostEntry(Dns.GetHostName());
+            //foreach (var ip in host.AddressList)
+            //{
+            //    if (ip.AddressFamily == AddressFamily.InterNetwork)
+            //    {
+            //        return ip.ToString();
+            //    }
+            //}
+            //throw new Exception("Local IP Address Not Found!");
         }
 
+        public static List<IPAddress> GetDefualtWayIpAddress() {
+            WlanClient client = new WlanClient();
+ 
+            List<IPAddress> IpList = new List<IPAddress>();
 
+            try
+            {
+                int count = 0;
+                foreach (WlanClient.WlanInterface wlanIface in client.Interfaces)
+                {
+                    count++;
+                    Wlan.WlanConnectionAttributes WlanConnection;
+                     try
+                    {
+                        WlanConnection = wlanIface.CurrentConnection;
+                    }
+                    catch (Exception)
+                    {
+
+                        continue;
+                    }
+
+                    NetworkInterface Interface = wlanIface.NetworkInterface;
+                    GatewayIPAddressInformationCollection gateway_address = Interface.GetIPProperties().GatewayAddresses;
+                    IPAddress DefualtGatewayAddress = null;
+                    foreach (var address in gateway_address)
+                    {
+                        if (address.Address.IsIPv6LinkLocal)
+                        {
+                        }
+                        else
+                        {
+                            DefualtGatewayAddress = address.Address;
+                            IpList.Add(DefualtGatewayAddress);
+                        }
+                    }
+                    
+                   
+                    
+                  
+
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return IpList;
+        }
 
         // Signals when the resolve has finished.
         public static ManualResetEvent GetHostEntryFinished =

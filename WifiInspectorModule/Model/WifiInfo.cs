@@ -28,6 +28,7 @@ namespace WifiInspectorModule.Model
         public string GHZ5 { get; set; }
         public string OverlappingAPS { get; set; }
 
+        public string Family { get; set; }
 
 
     }

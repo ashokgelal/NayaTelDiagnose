@@ -11,7 +11,7 @@ using System.Windows.Media;
 namespace ActivateUsersModule.Views
 {
     [Export]
-    [ViewSortHint("06")]
+    [ViewSortHint("04")]
     public partial class ActivateUsersNavigationItemView : UserControl, IPartImportsSatisfiedNotification, IDiagnoseAllService
     {
         private static Uri ViewUri = new Uri("/ActivateUsersView", UriKind.Relative);
@@ -70,19 +70,27 @@ namespace ActivateUsersModule.Views
             Uri ImageUri = new Uri("../Images/active_radio.png", UriKind.Relative);
 
             this.navigateImage.Source = new BitmapImage(ImageUri);
+            ShortTextBlock.Foreground = (Brush)Application.Current.MainWindow.FindResource("BrushShortDiscriptionIn");
+
         }
 
         private void navigateRadioButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            ShortTextBlock.Foreground = (Brush)Application.Current.MainWindow.FindResource("BrushShortDiscriptionOut");
+
             Uri ImageUri = (this.navigateRadioButton.IsChecked == true ? new Uri("../Images/active_radio.png", UriKind.Relative) : new Uri("../Images/In_active_radio.png", UriKind.Relative));
             this.navigateImage.Source = new BitmapImage(ImageUri);
 
         }
         public string getHeaderTitle()
         {
-            return "Active User";
+            return Constants.TEST_HEADER_TITTLE_ACTIVE_USERS;
         }
-
+        public string getShortDescription()
+        {
+            return Constants.TEST_HEADER_SHORT_DESCRIPTION_ACTIVE_USERS;
+        }
+         
         public Image getImageIcone()
         {
             Uri ImageUri = new Uri("/ActivateUsersModule;component/Resources/active_user.png", UriKind.Relative);

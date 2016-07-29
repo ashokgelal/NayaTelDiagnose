@@ -6,11 +6,12 @@ using System.Windows.Controls;
 using Prism.Regions;
 using ViewSwitchingNavigation.Infrastructure;
 using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace DataUsageModule.Views
 {
     [Export]
-    [ViewSortHint("07")]
+    [ViewSortHint("05")]
     public partial class DataUsageNavigationItemView : UserControl, IPartImportsSatisfiedNotification, IDiagnoseAllService
     {
         private static Uri ViewUri = new Uri("/DataUsageView", UriKind.Relative);
@@ -67,6 +68,8 @@ namespace DataUsageModule.Views
 
         private void navigateRadioButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            ShortTextBlock.Foreground = (Brush)Application.Current.MainWindow.FindResource("BrushShortDiscriptionIn");
+
             Uri ImageUri = new Uri("../Images/active_radio.png", UriKind.Relative);
 
             this.navigateImage.Source = new BitmapImage(ImageUri);
@@ -74,15 +77,20 @@ namespace DataUsageModule.Views
 
         private void navigateRadioButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            ShortTextBlock.Foreground = (Brush)Application.Current.MainWindow.FindResource("BrushShortDiscriptionOut");
+
             Uri ImageUri = (this.navigateRadioButton.IsChecked == true ? new Uri("../Images/active_radio.png", UriKind.Relative) : new Uri("../Images/In_active_radio.png", UriKind.Relative));
             this.navigateImage.Source = new BitmapImage(ImageUri);
 
         }
         public string getHeaderTitle()
         {
-            return "Data Usage";
+            return Constants.TEST_HEADER_TITTLE_DATA_USAGE;
         }
-
+        public string getShortDescription()
+        {
+            return Constants.TEST_HEADER_SHORT_DESCRIPTION_DATA_USAGE;
+        }
         public Image getImageIcone()
         {
             Uri ImageUri = new Uri("/DataUsageModule;component/Resources/usage.png", UriKind.Relative);

@@ -12,8 +12,7 @@ namespace ActivateUsersModule.Model
         public string Mac  { get; set; }
         public string Vendor { get; set; }
         public string HostName { get; set; }
-
-
+        
 
     }
 }

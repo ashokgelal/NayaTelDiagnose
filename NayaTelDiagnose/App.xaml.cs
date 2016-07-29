@@ -5,7 +5,13 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
- 
+using ViewSwitchingNavigation.Infrastructure;
+using System.Diagnostics;
+using Segment.Model;
+using ViewSwitchingNavigation.Infrastructure.Utils;
+using Com.DeskMetrics;
+using Microsoft.HockeyApp;
+
 namespace NayaTelDiagnose
 {
     /// <summary>
@@ -13,15 +19,39 @@ namespace NayaTelDiagnose
     /// </summary>
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
+
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            
+            
 
+            //optional should only used in debug builds. register an event-handler to get exceptions in HockeySDK code that are "swallowed" (like problems writing crashlogs etc.)
 #if (DEBUG)
-            RunInDebugMode();
+           
+            ((HockeyClient)HockeyClient.Current).OnHockeySDKInternalException += (sender, args) =>
+            {
+                if (Debugger.IsAttached) { Debugger.Break(); }
+            };
+            //RunInReleaseMode();
+             RunInDebugMode();
 #else
+
             RunInReleaseMode();
+            
+
 #endif
+
+            //send crashes to the HockeyApp server
+            await HockeyClient.Current.SendCrashesAsync();
+
+            //check for updates on the HockeyApp server
+            await HockeyClient.Current.CheckForUpdatesAsync(true, () =>
+            {
+                if (Application.Current.MainWindow != null) { Application.Current.MainWindow.Close(); }
+                return true;
+            });
+
             //this.ShutdownMode = ShutdownMode.OnMainWindowClose;
         }
 

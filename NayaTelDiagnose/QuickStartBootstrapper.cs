@@ -5,7 +5,10 @@ using ViewSwitchingNavigation.Infrastructure;
 using System.ComponentModel.Composition.Hosting;
 using System.Threading.Tasks;
 using System.Windows;
- 
+using Prism.Logging;
+using ViewSwitchingNavigation.Infrastructure.Log;
+using Com.DeskMetrics;
+
 namespace NayaTelDiagnose
 {
      public class QuickStartBootstrapper : MefBootstrapper
@@ -34,8 +37,14 @@ namespace NayaTelDiagnose
             base.InitializeShell();
             Application.Current.MainWindow = (Window)Shell;
             Application.Current.MainWindow.Show();
-           
         }
+
+        protected override ILoggerFacade CreateLogger()
+        {
+            return new CustomLogger();
+        }
+
+
     }
 
 }

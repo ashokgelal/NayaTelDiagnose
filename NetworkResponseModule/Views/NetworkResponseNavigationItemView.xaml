@@ -8,12 +8,16 @@
 
 
     <RadioButton  x:Name="navigateRadioButton"  Style="{StaticResource MainViewRadioButtonStyle}" GroupName="MainNavigation" Click="navigateRadioButton_Click"   AutomationProperties.AutomationId="EmailRadioButton" MouseEnter="navigateRadioButton_MouseEnter" MouseLeave="navigateRadioButton_MouseLeave">
-        <StackPanel Orientation="Horizontal" Height="50"  >
-            <Image x:Name="navigateImage" Width="30" Source="../Images/in_active_radio.png" Margin="2,0,0,0" Height="30" Stretch="Fill"/>
+         <StackPanel Height="50" Orientation="Horizontal" VerticalAlignment="Center">
+            <Image x:Name="navigateImage" HorizontalAlignment="Left" VerticalAlignment="Center" Width="30" Source="../Images/in_active_radio.png" Margin="2,0,0,0" Height="30" Stretch="Fill"/>
 
+            <StackPanel Orientation="Vertical"  Margin="10,0,0,0" VerticalAlignment="Center" >
+                <TextBlock x:Name="NavigateTextBlock" TextWrapping="Wrap" Text="Network Response"       />
+                <TextBlock x:Name="ShortTextBlock"   Margin="0,2,0,0" TextWrapping="Wrap" Text="Latency/Packet loss to specific host(s)"    Foreground="#ff777777"  FontSize="11"   FontFamily="Tahoma"/>
+            </StackPanel>
 
-            <TextBlock x:Name="NavigateTextBlock" TextWrapping="Wrap" Text="Network Response" Width="189.33"   Margin="10,0,0,0"  VerticalAlignment="Center"/>
         </StackPanel>
+
     </RadioButton>
 
 

@@ -13,7 +13,7 @@ namespace NetworkResponseModule.Services
 
     public interface INetworkResponseService
     {
-        void GetNetWorkResponse(string hostip, int timeout,  int PingTimout ,int max_ttl, int iteration_interval, int iterations_per_host, int packet_size, mtrRoutes mtrRoutes, result result);
+        void GetNetWorkResponse(string hostip, float hopTimeout,int timeout,  int PingTimout ,int max_ttl, int iteration_interval, int iterations_per_host, int packet_size, mtrRoutes mtrRoutes, result result);
         void StopMtr();
 
     }

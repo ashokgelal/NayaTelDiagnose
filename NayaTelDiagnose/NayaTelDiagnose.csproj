@@ -52,9 +52,28 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ic_launcher.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Analytics.NET, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Analytics.2.0.2\lib\Analytics.NET.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.HockeyApp.Core45, Version=4.1.3.27195, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HockeySDK.WPF.4.1.3\lib\net45\Microsoft.HockeyApp.Core45.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.HockeyApp.Kit, Version=4.1.3.27195, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HockeySDK.WPF.4.1.3\lib\net45\Microsoft.HockeyApp.Kit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Prism, Version=6.1.0.0, Culture=neutral, PublicKeyToken=91a96d2a154366d8, processorArchitecture=MSIL">
@@ -104,8 +123,8 @@
     <Compile Include="Controls\DaignosePaneControl.xaml.cs">
       <DependentUpon>DaignosePaneControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MyDialog.xaml.cs">
-      <DependentUpon>MyDialog.xaml</DependentUpon>
+    <Compile Include="Controls\UserInputDialog.xaml.cs">
+      <DependentUpon>UserInputDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ResearchControl.cs" />
     <Compile Include="Controls\RoundedBox.xaml.cs">
@@ -113,6 +132,9 @@
     </Compile>
     <Compile Include="EnterpriseLibraryLoggerAdapter.cs" />
     <Compile Include="MainWindowsViewsManager.cs" />
+    <Compile Include="MessageDialogWindow.xaml.cs">
+      <DependentUpon>MessageDialogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="QuickStartBootstrapper.cs" />
     <Compile Include="Shell.xaml.cs">
       <DependentUpon>Shell.xaml</DependentUpon>
@@ -122,7 +144,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\MyDialog.xaml">
+    <Page Include="Controls\UserInputDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -142,6 +164,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MessageDialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Shell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -174,7 +200,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -200,10 +228,6 @@
     <ProjectReference Include="..\DiagnoseAll\DiagnoseAll.csproj">
       <Project>{d363e0ae-9368-4e84-a715-0ab1473914b1}</Project>
       <Name>DiagnoseAll</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\nettools\src\nettools.csproj">
-      <Project>{CE9740F0-6106-4C0F-8C4B-FE77DD836D0F}</Project>
-      <Name>nettools</Name>
     </ProjectReference>
     <ProjectReference Include="..\NetworkResponseModule\NetworkResponseModule.csproj">
       <Project>{e4adeac7-c3dd-4902-8273-03131a56e597}</Project>
@@ -231,11 +255,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\blue_loader.gif" />
+    <Resource Include="ic_launcher.ico" />
     <Content Include="Images\active_user.png" />
-    <Resource Include="Resources\refresh_icon.png" />
-    <Resource Include="Resources\Loader33.gif" />
-    <Resource Include="Resources\diagnose_all.png" />
     <Resource Include="Resources\Loader3.gif" />
+    <None Include="Resources\69403627.png" />
+    <Resource Include="Resources\refresh_icon.png" />
+    <Resource Include="Resources\diagnose_all.png" />
+    <Resource Include="Resources\Loader23.gif" />
     <Resource Include="Images\active_user_active.png" />
     <Resource Include="Images\arrow_down.png" />
     <Resource Include="Images\arrow_up.png" />
@@ -251,9 +278,7 @@
     <Resource Include="Images\wif_inspector.png" />
     <Resource Include="Images\wif_inspector_active.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NewFolder\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>

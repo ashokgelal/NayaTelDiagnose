@@ -6,6 +6,8 @@ using System.Net.NetworkInformation;
 using System.ComponentModel.Composition;
 using ViewSwitchingNavigation.Infrastructure.Utils;
 using System.Diagnostics;
+using ViewSwitchingNavigation.Infrastructure.Log;
+using Prism.Logging;
 
 namespace DataUsageModule.Services
 {
@@ -14,23 +16,23 @@ namespace DataUsageModule.Services
     {
         long BytesReceivedPrev = 0;
         long BytesSentPrev = 0;
-        Stopwatch sw;
+       // Stopwatch sw;
 
-        public DataUsage  GetDataUsageAsync()
+        public DataUsage  GetDataUsageAsync(int seconds)
         {
-            return   GetDataUsage() ;
+            return   GetDataUsage(  seconds) ;
         }
 
         public void  clearDataUsage()
         {
             BytesReceivedPrev = 0;
             BytesSentPrev = 0;
-            if (sw != null) {
-                sw.Reset();
-            }
+            //if (sw != null) {
+            //    sw.Reset();
+            //}
         }
 
-        private DataUsage GetDataUsage()
+        private DataUsage GetDataUsage(int seconds)
         {
 
             if (!NetworkInterface.GetIsNetworkAvailable())
@@ -50,15 +52,17 @@ namespace DataUsageModule.Services
                 {
                     bytesReceived += inf.GetIPv4Statistics().BytesReceived;
                     bytesSent      += inf.GetIPv4Statistics().BytesSent;
-                     
-                
+                   
+               CustomLogger.PrintLog("Device Usage: bytesReceived:" + bytesReceived + " bytesSent:"+ bytesSent, Category.Debug, Priority.Low);
+
+
                 }
             }
 
             if (BytesReceivedPrev == 0)
             {
-                sw = new Stopwatch();
-                sw.Start();
+                //sw = new Stopwatch();
+                //sw.Start();
                 BytesReceivedPrev = bytesReceived;
                 BytesSentPrev = bytesSent;
                 DataUsage.Upload = UtilConvert.SizeToSpeed((bytesSent));
@@ -67,10 +71,11 @@ namespace DataUsageModule.Services
 
             }
             else {
-                DataUsage.Upload = UtilConvert.SizeToSpeed((long)((bytesSent - BytesSentPrev)/sw.Elapsed.TotalSeconds));
-                DataUsage.Download = UtilConvert.SizeToSpeed((long)((bytesReceived - BytesReceivedPrev)/ sw.Elapsed.TotalSeconds));
+                DataUsage.Upload = UtilConvert.SizeToSpeed((long)((bytesSent - BytesSentPrev)/ seconds));
+                DataUsage.Download = UtilConvert.SizeToSpeed((long)((bytesReceived - BytesReceivedPrev)/ seconds));
             }
 
+            CustomLogger.PrintLog("Device Usage: Seconds:"+seconds+" bytesReceived:" + UtilConvert.SizeToSpeed((long)((bytesReceived - BytesReceivedPrev) / seconds)) + " bytesSent:" + UtilConvert.SizeToSpeed((long)((bytesSent - BytesSentPrev) / seconds)), Category.Debug, Priority.Low);
 
             BytesReceivedPrev = bytesReceived;
             BytesSentPrev = bytesSent;

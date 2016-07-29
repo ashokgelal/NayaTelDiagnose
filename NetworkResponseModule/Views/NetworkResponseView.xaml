@@ -9,7 +9,7 @@
 
     <UserControl.Resources>
         <infrastructure:TextBlockInfo x:Key="Helper" />
-
+         
         <BooleanToVisibilityConverter x:Key="visibilityConverter" />
         <Style x:Key="ListContainerStyle" TargetType="ListBoxItem" BasedOn="{StaticResource DefaultListBoxItemStyle}">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -262,58 +262,16 @@
                 <ColumnDefinition/>
 
             </Grid.ColumnDefinitions>
-            <TextBox  Height="25" Margin="5,0,0,0" x:Name="CustomIPAdress" ToolTip="Enter IpAddress" FontSize="14"     Background="Transparent"  Width="150"  Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="{Binding UpdateSourceTrigger=PropertyChanged, Path=CustomIPAdress}"     HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+            <TextBox   Grid.Row="0" Grid.Column="0"  Height="25" Margin="5,0"  VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="CustomIPAdress" ToolTip="Enter IP Address" FontSize="14"     Background="Transparent"  Width="175"     Text="{Binding UpdateSourceTrigger=PropertyChanged, Path=CustomIPAdress}"     />
             <!--<TextBox x:Name="iteration_interval" Width="150"  Visibility="Collapsed" ToolTip="Enter Iteration Interval" FontSize="14"    Text="{Binding UpdateSourceTrigger=PropertyChanged, Path=CustomIterationInterval}" Visibility="{Binding CustomTextBoxHide, Converter={StaticResource visibilityConverter}}"   Grid.Row="0"  Grid.Column="0"    HorizontalAlignment="Center"  VerticalAlignment="Center"      />-->
-            <TextBox IsEnabled="{Binding  CustomTextBoxEnable}" Height="25" Margin="5,0,0,0" x:Name="iterations_per_host" Width="150" ToolTip="Enter Iteration Host" FontSize="14"    Text="{Binding UpdateSourceTrigger=PropertyChanged, Path=CustomiterationsPerHost}"    Grid.Row="0" Grid.Column="2"   HorizontalAlignment="Center"  VerticalAlignment="Center"  />
+            <TextBox  Grid.Row="0" Grid.Column="1"  Height="25" Margin="5,0"  HorizontalAlignment="Left"    x:Name="iterations_per_host" Width="175" ToolTip="Enter Number of Iterations" FontSize="14"    Text="{Binding UpdateSourceTrigger=PropertyChanged, Path=CustomiterationsPerHost}"         VerticalAlignment="Center"  />
            
             <!--<TextBox x:Name="MtrTimout" Width="150" ToolTip="Enter Time Out" FontSize="14"   Text="{Binding UpdateSourceTrigger=PropertyChanged, Path=CustomTimeOut}"  Grid.Row="0"  Grid.Column="0"  Visibility="{Binding CustomTextBoxHide, Converter={StaticResource visibilityConverter}}"  HorizontalAlignment="Center"  VerticalAlignment="Center"  />-->
-            <TextBox   IsEnabled="{Binding  CustomTextBoxEnable}" Height="25" Margin="5,0,0,0" x:Name="txtMtrIterationInterval" Width="165" ToolTip="Enter iteration interval" FontSize="14"   Text="{Binding UpdateSourceTrigger=PropertyChanged, Path=CustomIterationInterval}"  Grid.Row="0"  Grid.Column="0"    HorizontalAlignment="Center"  VerticalAlignment="Center"  />
-            <TextBox  IsEnabled="{Binding  CustomTextBoxEnable}" Height="25" Margin="5,0,0,0" x:Name="txtMtrPacketSize" Grid.Row="0"  Grid.Column="3" Width="150" ToolTip="Enter packet size" FontSize="14"   Text="{Binding UpdateSourceTrigger=PropertyChanged, Path=CustomPacketSize}"        HorizontalAlignment="Center"  VerticalAlignment="Center"  />
+            <TextBox   Grid.Row="0"  Grid.Column="2"  Height="25" Margin="5,0"  HorizontalAlignment="Left" x:Name="txtMtrIterationInterval" Width="175" ToolTip="Enter Iteration Interval" FontSize="14"   Text="{Binding UpdateSourceTrigger=PropertyChanged, Path=CustomIterationInterval}"        VerticalAlignment="Center"  />
+            <TextBox   Grid.Row="0"  Grid.Column="3" Height="25" Margin="5,0"  HorizontalAlignment="Left" x:Name="txtMtrPacketSize"  Width="175" ToolTip="Enter Packet Size" FontSize="14"   Text="{Binding UpdateSourceTrigger=PropertyChanged, Path=CustomPacketSize}"          VerticalAlignment="Center"  />
+            <TextBlock  Grid.Column="1" Grid.Row="1" Height="25" Margin="2,3,0,0"   Text="OR" HorizontalAlignment="Center"  VerticalAlignment="Center"   Foreground="Black" />
 
-            <TextBlock  IsEnabled="{Binding  CustomTextBoxEnable}"  Height="25" Margin="2,3,0,0"  Grid.Column="1" Grid.Row="1" Text="OR" HorizontalAlignment="Center"  VerticalAlignment="Center"   Foreground="Black" />
-
-            <TextBlock    Margin="5,0,0,0"   FontSize="14"   Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="Enter ip address ..." Foreground="LightGray">
-                <TextBlock.Visibility>
-                    <MultiBinding Converter="{StaticResource Helper}">
-                        <Binding ElementName="CustomIPAdress" Path="Text.IsEmpty" />
-                        <Binding ElementName="CustomIPAdress" Path="IsFocused" />
-                        <Binding ElementName="CustomIPAdress" Path="IsMouseOver" />
-
-                    </MultiBinding>
-                </TextBlock.Visibility>
-            </TextBlock>
-            <TextBlock  Grid.Row="0" Grid.Column="2" FontSize="14"  Margin="5,2"  HorizontalAlignment="Center"  VerticalAlignment="Center" Text="Enter iteration host ..." Foreground="LightGray">
-                <TextBlock.Visibility>
-                    <MultiBinding Converter="{StaticResource Helper}">
-                        <Binding ElementName="iterations_per_host" Path="Text.IsEmpty" />
-                        <Binding ElementName="iterations_per_host" Path="IsFocused" />
-                        <Binding ElementName="iterations_per_host" Path="IsMouseOver" />
-                       
-
-                    </MultiBinding>
-                </TextBlock.Visibility>
-            </TextBlock>
-            <TextBlock  Grid.Row="0"  Grid.Column="0" FontSize="14"  Margin="5,2"  HorizontalAlignment="Center"  VerticalAlignment="Center" Text="Enter Iteration Interval ..." Foreground="LightGray">
-                <TextBlock.Visibility>
-                    <MultiBinding Converter="{StaticResource Helper}">
-                        <Binding ElementName="txtMtrIterationInterval" Path="Text.IsEmpty" />
-                        <Binding ElementName="txtMtrIterationInterval" Path="IsFocused" />
-                        <Binding ElementName="txtMtrIterationInterval" Path="IsMouseOver" />
-  
-                    </MultiBinding>
-                </TextBlock.Visibility>
-            </TextBlock>
-            <TextBlock  Grid.Row="0" Grid.Column="3" FontSize="14"  Margin="5,2"  HorizontalAlignment="Center"  VerticalAlignment="Center" Text="Enter Packet size ..." Foreground="LightGray">
-                <TextBlock.Visibility>
-                    <MultiBinding Converter="{StaticResource Helper}">
-                        <Binding ElementName="txtMtrPacketSize" Path="Text.IsEmpty" />
-                        <Binding ElementName="txtMtrPacketSize" Path="IsFocused" />
-                        <Binding ElementName="txtMtrPacketSize" Path="IsMouseOver" />
-  
-                    </MultiBinding>
-                </TextBlock.Visibility>
-            </TextBlock>
-
+           
             <Button x:Name="Start"  Command="{Binding StartMtrCommand}"  Grid.Column="1" Grid.Row="2"  HorizontalAlignment="Center"  VerticalAlignment="Top" Width="150" Height="30" Background="#3c83c5" FontSize="14" Foreground="White" BorderThickness="0"  BorderBrush="{x:Null}" Content="Start" Margin="0,-2,0,0">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
@@ -336,8 +294,47 @@
                 </Button.Style>
             </Button>
 
+            <TextBlock   Margin="10,0"  HorizontalAlignment="Left" VerticalAlignment="Center"  FontSize="14"   Grid.Row="0" Grid.Column="0"      Text="Enter IP Address" Foreground="LightGray">
+                <TextBlock.Visibility>
+                    <MultiBinding Converter="{StaticResource Helper}">
+                        <Binding ElementName="CustomIPAdress" Path="Text.IsEmpty" />
+                        <Binding ElementName="CustomIPAdress" Path="IsFocused" />
+                        <Binding ElementName="CustomIPAdress" Path="IsMouseOver" />
+
+                    </MultiBinding>
+                </TextBlock.Visibility>
+            </TextBlock>
+            <TextBlock  Grid.Row="0" Grid.Column="1" FontSize="14" Margin="10,0"  HorizontalAlignment="Left" VerticalAlignment="Center" Text="Enter Number of Iterations" Foreground="LightGray">
+                <TextBlock.Visibility>
+                    <MultiBinding Converter="{StaticResource Helper}">
+                        <Binding ElementName="iterations_per_host" Path="Text.IsEmpty" />
+                        <Binding ElementName="iterations_per_host" Path="IsFocused" />
+                        <Binding ElementName="iterations_per_host" Path="IsMouseOver" />
 
 
+                    </MultiBinding>
+                </TextBlock.Visibility>
+            </TextBlock>
+            <TextBlock  Grid.Row="0"  Grid.Column="2" FontSize="14"  Margin="10,0"  HorizontalAlignment="Left"   VerticalAlignment="Center" Text="Enter Iteration Interval" Foreground="LightGray">
+                <TextBlock.Visibility>
+                    <MultiBinding Converter="{StaticResource Helper}">
+                        <Binding ElementName="txtMtrIterationInterval" Path="Text.IsEmpty" />
+                        <Binding ElementName="txtMtrIterationInterval" Path="IsFocused" />
+                        <Binding ElementName="txtMtrIterationInterval" Path="IsMouseOver" />
+
+                    </MultiBinding>
+                </TextBlock.Visibility>
+            </TextBlock>
+            <TextBlock  Grid.Row="0" Grid.Column="3" FontSize="14"  Margin="10,0"  HorizontalAlignment="Left"  VerticalAlignment="Center" Text="Enter Packet Size" Foreground="LightGray">
+                <TextBlock.Visibility>
+                    <MultiBinding Converter="{StaticResource Helper}">
+                        <Binding ElementName="txtMtrPacketSize" Path="Text.IsEmpty" />
+                        <Binding ElementName="txtMtrPacketSize" Path="IsFocused" />
+                        <Binding ElementName="txtMtrPacketSize" Path="IsMouseOver" />
+
+                    </MultiBinding>
+                </TextBlock.Visibility>
+            </TextBlock>
         </Grid>
 
 
@@ -353,24 +350,15 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition />
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+               
 
             </Grid.ColumnDefinitions>
 
-            <Border  Grid.Row="0" Grid.Column="0" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="1" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="2" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="3" Background="{DynamicResource SecondaryHeaderGridBrush}" >
-                <TextBlock Text="8.8.8.8" HorizontalAlignment="Center"  VerticalAlignment="Center"   RenderTransformOrigin="0.53,0.704" Foreground="White" />
+             
+            <Border Grid.Row="0" Grid.Column="0" Background="{DynamicResource SecondaryHeaderGridBrush}" >
+                <TextBlock Text="203.82.48.3" HorizontalAlignment="Center"  VerticalAlignment="Center"   RenderTransformOrigin="0.53,0.704" Foreground="White" />
             </Border>
-            <Border Grid.Row="0" Grid.Column="4" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="5" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="6" Background="{DynamicResource SecondaryHeaderGridBrush}" />
+            
 
         </Grid>
         <Grid  x:Name="GridHeader1"  VerticalAlignment="Top" Visibility="{Binding DisplayControlGridHeaderHide, Converter={StaticResource visibilityConverter}}">
@@ -401,14 +389,14 @@
 
 
 
-            <TextBlock   Grid.Column="0" Text="Host name" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="0" Text="Host Name" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
             <TextBlock   Grid.Column="1" Text="Loss %" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
             <TextBlock   Grid.Column="2" Text="Sent Packets" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
 
             <TextBlock   Grid.Column="3" Text="Received Packets" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
-            <TextBlock   Grid.Column="4" Text="Best(ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
-            <TextBlock   Grid.Column="5" Text="Avg(ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
-            <TextBlock   Grid.Column="6" Text="Worst(ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="4" Text="Best (ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="5" Text="Avg (ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="6" Text="Worst (ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
 
 
 
@@ -436,25 +424,13 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition />
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-
+               
             </Grid.ColumnDefinitions>
 
-            <Border  Grid.Row="0" Grid.Column="0" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="1" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="2" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="3" Background="{DynamicResource SecondaryHeaderGridBrush}" >
-                <TextBlock Text="203.82.48.3" HorizontalAlignment="Center"  VerticalAlignment="Center"   RenderTransformOrigin="0.53,0.704" Foreground="White" />
+                 <Border Grid.Row="0" Grid.Column="3" Background="{DynamicResource SecondaryHeaderGridBrush}" >
+                <TextBlock Text="115.186.188.3" HorizontalAlignment="Center"  VerticalAlignment="Center"   RenderTransformOrigin="0.53,0.704" Foreground="White" />
             </Border>
-            <Border Grid.Row="0" Grid.Column="4" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="5" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="6" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-
+             
         </Grid>
         <Grid  x:Name="GridHeader2"  VerticalAlignment="Top" Visibility="{Binding DisplayControl2, Converter={StaticResource visibilityConverter}}">
 
@@ -484,14 +460,14 @@
 
 
 
-            <TextBlock   Grid.Column="0" Text="Host name" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="0" Text="Host Name" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
             <TextBlock   Grid.Column="1" Text="Loss %" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
             <TextBlock   Grid.Column="2" Text="Sent Packets" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
 
             <TextBlock   Grid.Column="3" Text="Received Packets" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
-            <TextBlock   Grid.Column="4" Text="Best(ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
-            <TextBlock   Grid.Column="5" Text="Avg(ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
-            <TextBlock   Grid.Column="6" Text="Worst(ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="4" Text="Best (ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="5" Text="Avg (ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="6" Text="Worst (ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
 
 
 
@@ -515,25 +491,13 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition />
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-
+                 
             </Grid.ColumnDefinitions>
 
-            <Border  Grid.Row="0" Grid.Column="0" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="1" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="2" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="3" Background="{DynamicResource SecondaryHeaderGridBrush}" >
-                <TextBlock Text="115.186.188.3" HorizontalAlignment="Center"  VerticalAlignment="Center"   RenderTransformOrigin="0.53,0.704" Foreground="White" />
+                   <Border Grid.Row="0" Grid.Column="3" Background="{DynamicResource SecondaryHeaderGridBrush}" >
+                <TextBlock Text="8.8.8.8" HorizontalAlignment="Center"  VerticalAlignment="Center"   RenderTransformOrigin="0.53,0.704" Foreground="White" />
             </Border>
-            <Border Grid.Row="0" Grid.Column="4" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="5" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="6" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-
+          
         </Grid>
         <Grid  x:Name="GridHeader3"  VerticalAlignment="Top" Visibility="{Binding DisplayControl3, Converter={StaticResource visibilityConverter}}">
 
@@ -563,14 +527,14 @@
 
 
 
-            <TextBlock   Grid.Column="0" Text="Host name" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="0" Text="Host Name" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
             <TextBlock   Grid.Column="1" Text="Loss %" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
             <TextBlock   Grid.Column="2" Text="Sent Packets" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
 
             <TextBlock   Grid.Column="3" Text="Received Packets" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
-            <TextBlock   Grid.Column="4" Text="Best(ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
-            <TextBlock   Grid.Column="5" Text="Avg(ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
-            <TextBlock   Grid.Column="6" Text="Worst(ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="4" Text="Best (ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="5" Text="Avg (ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="6" Text="Worst (ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
 
 
 
@@ -597,25 +561,13 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition />
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-
+                
             </Grid.ColumnDefinitions>
 
-            <Border  Grid.Row="0" Grid.Column="0" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="1" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="2" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="3" Background="{DynamicResource SecondaryHeaderGridBrush}" >
+                <Border Grid.Row="0" Grid.Column="3" Background="{DynamicResource SecondaryHeaderGridBrush}" >
                 <TextBlock Text="4.2.2.2" HorizontalAlignment="Center"  VerticalAlignment="Center"   RenderTransformOrigin="0.53,0.704" Foreground="White" />
             </Border>
-            <Border Grid.Row="0" Grid.Column="4" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="5" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="6" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-
+            
         </Grid>
         <Grid  x:Name="GridHeader4"  VerticalAlignment="Top" Visibility="{Binding DisplayControl4, Converter={StaticResource visibilityConverter}}">
 
@@ -645,14 +597,14 @@
 
 
 
-            <TextBlock   Grid.Column="0" Text="Host name" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="0" Text="Host Name" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
             <TextBlock   Grid.Column="1" Text="Loss %" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
             <TextBlock   Grid.Column="2" Text="Sent Packets" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
 
             <TextBlock   Grid.Column="3" Text="Received Packets" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
-            <TextBlock   Grid.Column="4" Text="Best(ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
-            <TextBlock   Grid.Column="5" Text="Avg(ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
-            <TextBlock   Grid.Column="6" Text="Worst(ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="4" Text="Best (ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="5" Text="Avg (ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
+            <TextBlock   Grid.Column="6" Text="Worst (ms)" HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="10,0,0,0" Foreground="White" />
 
 
 
@@ -677,26 +629,16 @@
 
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition />
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                
+                <ColumnDefinition  />
+                
 
             </Grid.ColumnDefinitions>
 
-            <Border  Grid.Row="0" Grid.Column="0" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="1" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="2" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="3" Background="{DynamicResource SecondaryHeaderGridBrush}" >
+             <Border Grid.Row="0" Grid.Column="0" Background="{DynamicResource SecondaryHeaderGridBrush}" >
                 <TextBlock Text="{Binding CustomIPAdress}" HorizontalAlignment="Center"  VerticalAlignment="Center"   RenderTransformOrigin="0.53,0.704" Foreground="White" />
             </Border>
-            <Border Grid.Row="0" Grid.Column="4" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="5" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-            <Border Grid.Row="0" Grid.Column="6" Background="{DynamicResource SecondaryHeaderGridBrush}" />
-
+            
         </Grid>
 
 

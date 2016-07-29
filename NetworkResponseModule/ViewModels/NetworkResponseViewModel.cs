@@ -20,6 +20,9 @@ using Prism.Commands;
 using System.Windows.Input;
 using Prism.Events;
 using ViewSwitchingNavigation.Infrastructure.Events;
+using ViewSwitchingNavigation.Infrastructure.Utils;
+using System.Diagnostics;
+using static ViewSwitchingNavigation.Infrastructure.PropertyProvider;
 
 namespace NetworkResponseModule.ViewModels
 {
@@ -28,14 +31,15 @@ namespace NetworkResponseModule.ViewModels
     {
         protected readonly IEventAggregator eventAggregator;
         Dictionary<String, String> infiDic;
-        PropertyProvider.TestType testType;
-        private readonly INetworkResponseService netWorkResponse;
+         private readonly INetworkResponseService netWorkResponse;
         private readonly IRegionManager regionManager;
         private ObservableCollection<NetWorkResponse> netWorkResponseCollection1;
         private ObservableCollection<NetWorkResponse> netWorkResponseCollection2;
         private ObservableCollection<NetWorkResponse> netWorkResponseCollection3;
         private ObservableCollection<NetWorkResponse> netWorkResponseCollection4;
         private ObservableCollection<NetWorkResponse> netWorkResponseCollectionCustomMtr;
+        String[] MTR_IPS_LIST = new String[] { "203.82.48.3", "115.186.188.3", "8.8.8.8","4.2.2.2" };
+
 
         private readonly DelegateCommand<object> startMtrCommand;
 
@@ -150,9 +154,11 @@ namespace NetworkResponseModule.ViewModels
         int indexHost = 0;
         bool isStop = false;
         int TestTimeout = 0;
+        Boolean isEmail = true;
         BackgroundWorker barInvoker;
         PropertyProvider.WindowsMethod CurrentTestMethod;
-
+        PropertyProvider.TestType CurrentTestType;
+        Stopwatch _SW;
         [ImportingConstructor]
         public NetworkResponseViewModel(INetworkResponseService netWorkResponse, IRegionManager regionManager, IEventAggregator eventAggregator)
         {
@@ -180,12 +186,16 @@ namespace NetworkResponseModule.ViewModels
             this.eventAggregator = eventAggregator;
             CurrentTestMethod = PropertyProvider.WindowsMethod.network_response;
             this.eventAggregator.GetEvent<TestRestartTestEvent>().Subscribe(this.restartTest, ThreadOption.UIThread);
-
-        }
+            _SW = new Stopwatch();
+         }
         private void restartTest(PropertyProvider.WindowsMethod currentTest)
         {
             if (currentTest == CurrentTestMethod)
             {
+                if(!String.IsNullOrEmpty(this.CustomIPAdress))
+                if (this.CustomIPAdress.Contains("(")) {
+                    this.CustomIPAdress = this.CustomIPAdress.Substring(0,this.CustomIPAdress.IndexOf("("));
+                }
                 Dispose();
                 StartMtrPressed(null);
             }
@@ -199,7 +209,7 @@ namespace NetworkResponseModule.ViewModels
             TestInfo info = new TestInfo();
             info.sender = this;
             info.testMethod = PropertyProvider.WindowsMethod.network_response;
-            info.testType = testType;
+            info.testType = this.CurrentTestType;
             this.eventAggregator.GetEvent<TestStartEvent>().Publish(info);
 
         }
@@ -213,59 +223,72 @@ namespace NetworkResponseModule.ViewModels
             {
                 if (!isStop && isCustomMtr)
                 {
+                    //stop Watch stop;
+                    
+                    _SW.Stop();
                     TestInfo info = new TestInfo();
                     infiDic = new Dictionary<string, string>();
                     infiDic.Add("time", "23");
                     info.infiDic = infiDic;
                     info.sender = this;
                     info.testMethod = PropertyProvider.WindowsMethod.network_response;
-                    info.testType = testType;
+                    info.testType = CurrentTestType;
                     this.eventAggregator.GetEvent<TestCompleteEvent>().Publish(info);
+                    
                 }
 
                 if (indexHost == 1 && !isStop && !isCustomMtr)
                 {
                     DisplayControl2 = true;
 
-                    this.Initialize("203.82.48.3", netWorkResponseCollection2, false);
+                    this.Initialize(MTR_IPS_LIST[1], netWorkResponseCollection2, false);
 
                 }
                 else if (indexHost == 2 && !isStop && !isCustomMtr)
                 {
                     DisplayControl3 = true;
 
-                    this.Initialize("115.186.188.3", netWorkResponseCollection3, false);
+                    this.Initialize(MTR_IPS_LIST[2], netWorkResponseCollection3, false);
 
                 }
                 else if (indexHost == 3 && !isStop && !isCustomMtr)
                 {
                     DisplayControl4 = true;
 
-                    this.Initialize("4.2.2.2", netWorkResponseCollection4, false);
+                    this.Initialize(MTR_IPS_LIST[3], netWorkResponseCollection4, false);
 
                 } else if ((indexHost == 4 && !isStop)) {
+                    // Stop watch
+                    _SW.Stop();
                     TestInfo info = new TestInfo();
                     infiDic = new Dictionary<string, string>();
                     infiDic.Add("time", "23");
                     info.infiDic = infiDic;
                     info.sender = this;
                     info.testMethod = PropertyProvider.WindowsMethod.network_response;
-                    info.testType = testType;
+                    info.testType = CurrentTestType;
                     this.eventAggregator.GetEvent<TestCompleteEvent>().Publish(info);
+                    
                 }
             };
             barInvoker.DoWork += delegate
             {
                 Thread.Sleep(TimeSpan.FromSeconds(0.10));
 
-
-                int max_ttl = PropertyProvider.getPropertyProvider().getMTRProperty(PropertyProvider.NetworkResponse.MAX_TTL);
-                int iteration_interval = PropertyProvider.getPropertyProvider().getMTRProperty(PropertyProvider.NetworkResponse.IterationInterval);
-                int iterations_per_host = PropertyProvider.getPropertyProvider().getMTRProperty(PropertyProvider.NetworkResponse.IterationsPerHost);
-
-                int packet_size = PropertyProvider.getPropertyProvider().getMTRProperty(PropertyProvider.NetworkResponse.PacketSize);
-
+                int max_ttl = PropertyProvider.getPropertyProvider().getMTRMaxTtL();
+                MTR_Config_Values Config_iteration_interval = PropertyProvider.getPropertyProvider().getMTRProperty(PropertyProvider.NetworkResponse.IterationInterval);
+                MTR_Config_Values Config_iterations_per_host = PropertyProvider.getPropertyProvider().getMTRProperty(PropertyProvider.NetworkResponse.IterationsPerHost);
+                MTR_Config_Values Config_packet_size = PropertyProvider.getPropertyProvider().getMTRProperty(PropertyProvider.NetworkResponse.PacketSize);
+                hop_discovery_Timout  Hop_Descovery =  PropertyProvider.getPropertyProvider().hopDiscovery();
+                float hopTimeout = Hop_Descovery.Default;
                 if (isCustomMtr)
+                    hopTimeout = Hop_Descovery.custom;
+
+                int iteration_interval = Config_iteration_interval.Default;
+                int iterations_per_host = Config_iterations_per_host.Default;
+                int packet_size = Config_packet_size.Default;
+
+                if (  CurrentTestType != PropertyProvider.TestType.DiagnoseAll)
                 {
                     int converstion = 0;
                     if (int.TryParse(this.CustomPacketSize, out converstion))
@@ -274,26 +297,38 @@ namespace NetworkResponseModule.ViewModels
                         iteration_interval = converstion;
                     if (int.TryParse(this.CustomiterationsPerHost, out converstion))
                         iterations_per_host = converstion;
-
                 }
 
 
 
-                int pingtimout = (testType == PropertyProvider.TestType.DiagnoseAll) ? Constants.DIAGNOSEALL_PING_TIME_OUT : Constants.INDIVIDUAL_PING_TIME_OUT;
-                this.netWorkResponse.GetNetWorkResponse(host, TestTimeout, pingtimout, max_ttl, iteration_interval, iterations_per_host, packet_size, (IEnumerable<IPAddress> routes1) =>
+                int pingtimout = (CurrentTestType == PropertyProvider.TestType.DiagnoseAll) ? Constants.DIAGNOSEALL_PING_TIME_OUT : Constants.INDIVIDUAL_PING_TIME_OUT;
+                netWorkResponse.GetNetWorkResponse(host, hopTimeout,TestTimeout, pingtimout, max_ttl, iteration_interval, iterations_per_host, packet_size, (IEnumerable<IPAddress> routes1) =>
                 {
-
                     foreach (var item in routes1)
                     {
                         NetWorkResponse response = new NetWorkResponse();
-                        response.IPAdress = item.ToString();
-                        response.Last = "0";
-                        response.Rec = "0";
-                        response.Loss = "0";
-                        response.Avg = "0";
-                        response.Best = "0";
-                        response.Worst = "0";
-                        response.Sent = "0";
+                        if (item == null)
+                        {
+                            response.IPAdress = "*";
+                            response.Last = "*";
+                            response.Rec = "*";
+                            response.Loss = "*";
+                            response.Avg = "*";
+                            response.Best = "*";
+                            response.Worst = "*";
+                            response.Sent = "*";
+                        }
+                        else {
+                            response.IPAdress = item.ToString();
+                            response.Last = "0";
+                            response.Rec = "0";
+                            response.Loss = "0";
+                            response.Avg = "0";
+                            response.Best = "0";
+                            response.Worst = "0";
+                            response.Sent = "0";
+                        }
+                       
                         //mtrDictionary.Add(item.ToString(), response);
 
                         Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
@@ -314,15 +349,24 @@ namespace NetworkResponseModule.ViewModels
                  Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
                  {
 
-                       
-                        // if (netWorkResponseCollection[i].IPAdress == mtr.IPAdress)
-                         //{
-                             netWorkResponseCollection.RemoveAt(mtr.Index);
-                             netWorkResponseCollection.Insert(mtr.Index, mtr);
+
+                     // if (netWorkResponseCollection[i].IPAdress == mtr.IPAdress)
+                     //{
+                     if (netWorkResponseCollection.Count() > 0)
+                     {
+                         if (mtr.Loss.Contains(".")) {
+                             mtr.Loss = mtr.Loss.Substring(0,mtr.Loss.IndexOf("."));
+
+                         }
+                         netWorkResponseCollection.RemoveAt(mtr.Index);
+                         netWorkResponseCollection.Insert(mtr.Index, mtr);
 
 
-                         //}
-                     
+                     }
+
+
+                     //}
+
 
 
 
@@ -351,26 +395,42 @@ namespace NetworkResponseModule.ViewModels
             if (navigationContext.Parameters.Count() > 0)
             {
                 Object testType1 = navigationContext.Parameters[TestInfo.ParmKey];
-                this.testType = (PropertyProvider.TestType)testType1;
+                this.CurrentTestType = (PropertyProvider.TestType)testType1;
             }
             else
             {
-                this.testType = PropertyProvider.TestType.Individual;
+                this.CurrentTestType = PropertyProvider.TestType.Individual;
+
+                MTR_Config_Values Config_iteration_interval = PropertyProvider.getPropertyProvider().getMTRProperty(PropertyProvider.NetworkResponse.IterationInterval);
+                MTR_Config_Values Config_iterations_per_host = PropertyProvider.getPropertyProvider().getMTRProperty(PropertyProvider.NetworkResponse.IterationsPerHost);
+                MTR_Config_Values Config_packet_size = PropertyProvider.getPropertyProvider().getMTRProperty(PropertyProvider.NetworkResponse.PacketSize);
+
+
+
+                int iteration_interval = Config_iteration_interval.Default;
+                int iterations_per_host = Config_iterations_per_host.Default;
+                int packet_size = Config_packet_size.Default;
+
+                this.CustomPacketSize = packet_size.ToString();
+                     this.CustomIterationInterval   = iteration_interval.ToString();
+                     this.CustomiterationsPerHost = iterations_per_host.ToString();
+                
+
+
             }
-            if (this.testType == PropertyProvider.TestType.DiagnoseAll)
+            if (this.CurrentTestType == PropertyProvider.TestType.DiagnoseAll)
             {
-                indexHost = 0;
-                isStop = false;
-                DisplayControlGridHeaderHide = true;
-                this.GridCustomMTRHide = false;
-                var tuple = PropertyProvider.getPropertyProvider().getTestTimeout(PropertyProvider.WindowsMethod.network_response, this.testType);
-                TestTimeout = tuple.Item1 * 1000 / 4;
-                DisplayControl1 = true;
-
-                this.Initialize("8.8.8.8", netWorkResponseCollection1, false);
-
+                // indexHost = 0;
+                // isStop = false;
+                // DisplayControlGridHeaderHide = true;
+                // this.GridCustomMTRHide = false;
+                //  var tuple = PropertyProvider.getPropertyProvider().getTestTimeout(PropertyProvider.WindowsMethod.network_response, this.CurrentTestType);
+                //  TestTimeout = tuple.Item1 * 1000 / 4;
+                // DisplayControl1 = true;
+                //this.Initialize(MTR_IPS_LIST.First(), netWorkResponseCollection1, false);
+                  StartMtrPressed(null);
             }
-             
+
 
 
         }
@@ -384,7 +444,7 @@ namespace NetworkResponseModule.ViewModels
         {
 
 
-
+           this.CustomIPAdress = "";
             Dispose();
 
 
@@ -423,6 +483,7 @@ namespace NetworkResponseModule.ViewModels
 
         public void Dispose()
         {
+            
             cancelTest();
             this.netWorkResponse.StopMtr();
             if (barInvoker != null)
@@ -448,34 +509,167 @@ namespace NetworkResponseModule.ViewModels
             Dispose();
          }
 
+         
         public override void StartTest()
         {
+            var tuple = PropertyProvider.getPropertyProvider().getTestTimeout(PropertyProvider.WindowsMethod.network_response, this.CurrentTestType);
+
+            //For Diagnose all test
+            if (this.CurrentTestType == PropertyProvider.TestType.DiagnoseAll)
+            {
+                indexHost = 0;
+                isStop = false;
+                DisplayControlGridHeaderHide = true;
+                this.GridCustomMTRHide = false;
+                TestTimeout = tuple.Item1 * 1000 / 4;
+                DisplayControl1 = true;
+                this.Initialize(MTR_IPS_LIST.First(), netWorkResponseCollection1, false);
+                return;
+             }
 
 
+            IPAddress CustomIP;
+ 
+            string host = null;
+            if (!IPAddress.TryParse(this.CustomIPAdress, out CustomIP) && !String.IsNullOrEmpty(this.CustomIPAdress)) {
+                try
+                {
+                     IPAddress[] addresslist = Dns.GetHostAddresses(this.CustomIPAdress.Trim());
+                    if (addresslist.Count()>0)
+                    {
+                        host =  addresslist.First().ToString();
+                    }
+                }
+                catch (Exception)
+                {
+                    DisplayMessage message = new DisplayMessage();
+                    message.displayScren = DisplayMessage.DisplayScreen.Box;
+                    message.message = Constants.MESSAGES_INPUT_INVALID_HOST_NAME.Replace(Constants.MESSAGES_INPUT_REPLACE_VALUE, this.CustomIPAdress);
+                    message.messageTittle = getTestTittle();
+                    this.eventAggregator.GetEvent<DisplayMessageEvent>().Publish(message);
+
+
+                     testFaild();
+
+
+                    return;
+                }
+               
+
+            }
+
+
+           
+            // validation iteration, intervals,packet size
+
+            if (!UtilValidation.isNumber(this.CustomiterationsPerHost))
+            {
+                testFaild();
+                 DisplayMessage message = new DisplayMessage();
+                message.displayScren = DisplayMessage.DisplayScreen.Box;
+                message.message = Constants.MESSAGES_INPUT_INVALID_INTERVAL.Replace(Constants.MESSAGES_INPUT_REPLACE_VALUE, this.CustomiterationsPerHost);
+                message.messageTittle = getTestTittle();
+                this.eventAggregator.GetEvent<DisplayMessageEvent>().Publish(message);
+
+                return;
+            }
+
+
+            else if (!UtilValidation.isNumber(this.CustomIterationInterval))
+            {
+                testFaild();
+                DisplayMessage message = new DisplayMessage();
+                message.displayScren = DisplayMessage.DisplayScreen.Box;
+                message.message = Constants.MESSAGES_INPUT_INVALID_ITERATION.Replace(Constants.MESSAGES_INPUT_REPLACE_VALUE, this.CustomIterationInterval);
+                message.messageTittle = getTestTittle();
+                this.eventAggregator.GetEvent<DisplayMessageEvent>().Publish(message);
+
+                 return;
+
+            }
+            else if (!UtilValidation.isNumber(this.CustomPacketSize)) {
+                testFaild();
+                DisplayMessage message = new DisplayMessage();
+                message.displayScren = DisplayMessage.DisplayScreen.Box;
+                message.message = Constants.MESSAGES_INPUT_INVALID_PACKET_SIZE.Replace(Constants.MESSAGES_INPUT_REPLACE_VALUE, this.CustomPacketSize);
+                message.messageTittle = getTestTittle();
+                this.eventAggregator.GetEvent<DisplayMessageEvent>().Publish(message);
+                return;
+            }
+
+
+            //////// Check max and min value mtr custom field
+
+            MTR_Config_Values Config_iteration_interval = PropertyProvider.getPropertyProvider().getMTRProperty(PropertyProvider.NetworkResponse.IterationInterval);
+            MTR_Config_Values Config_iterations_per_host = PropertyProvider.getPropertyProvider().getMTRProperty(PropertyProvider.NetworkResponse.IterationsPerHost);
+            MTR_Config_Values Config_packet_size = PropertyProvider.getPropertyProvider().getMTRProperty(PropertyProvider.NetworkResponse.PacketSize);
+
+            if (Config_iterations_per_host.Min > int.Parse(this.CustomiterationsPerHost) || Config_iterations_per_host.Max < int.Parse(this.CustomiterationsPerHost))
+            {
+                testFaild();
+                DisplayMessage message = new DisplayMessage();
+                message.displayScren = DisplayMessage.DisplayScreen.Box;
+                message.message = Constants.MESSAGES_INPUT_MIN_MAX_ITERATION.Replace(Constants.MESSAGES_INPUT_REPLACE_VALUE, Config_iterations_per_host.Min +" AND "+ Config_iterations_per_host.Max);
+                message.messageTittle = getTestTittle();
+                this.eventAggregator.GetEvent<DisplayMessageEvent>().Publish(message);
+
+                return;
+            }
+            if (Config_iteration_interval.Min > int.Parse(this.CustomIterationInterval) || Config_iteration_interval.Max < int.Parse(this.CustomIterationInterval))
+            {
+                testFaild();
+                DisplayMessage message = new DisplayMessage();
+                message.displayScren = DisplayMessage.DisplayScreen.Box;
+                message.message = Constants.MESSAGES_INPUT_MIN_MAX_ITERATION.Replace(Constants.MESSAGES_INPUT_REPLACE_VALUE, Config_iteration_interval.Min + " AND " + Config_iteration_interval.Max);
+                message.messageTittle = getTestTittle();
+                this.eventAggregator.GetEvent<DisplayMessageEvent>().Publish(message);
+
+                return;
+            }
+            if (Config_packet_size.Min > int.Parse(this.CustomPacketSize) || Config_packet_size.Max < int.Parse(this.CustomPacketSize))
+            {
+                testFaild();
+                DisplayMessage message = new DisplayMessage();
+                message.displayScren = DisplayMessage.DisplayScreen.Box;
+                message.message = Constants.MESSAGES_INPUT_MIN_MAX_ITERATION.Replace(Constants.MESSAGES_INPUT_REPLACE_VALUE, Config_packet_size.Min + " AND " + Config_packet_size.Max);
+                message.messageTittle = getTestTittle();
+                this.eventAggregator.GetEvent<DisplayMessageEvent>().Publish(message);
+
+                return;
+            }
+
+
+
+
+
+
+            ////////////////////////// Test Starting
+            isEmail = true;
             indexHost = 0;
             isStop = false;
             DisplayControlGridHeaderHide = true;
             this.GridCustomMTRHide = false;
-
-            IPAddress CustomIP;
-            var tuple = PropertyProvider.getPropertyProvider().getTestTimeout(PropertyProvider.WindowsMethod.network_response, PropertyProvider.TestType.Individual);
-            
-
-            if (IPAddress.TryParse(this.CustomIPAdress, out CustomIP))
+            //check total time out for testing
+            _SW.Reset();
+            _SW.Start();
+            if (IPAddress.TryParse(this.CustomIPAdress, out CustomIP) || !String.IsNullOrEmpty(host))
             {
                 DisplayControlCoustomMtr = true;
                 netWorkResponseCollectionCustomMtr.Clear();
-                 
-                TestTimeout = tuple.Item1 * 1000;
- 
-                this.Initialize(CustomIP.ToString(), netWorkResponseCollectionCustomMtr, true);
 
-            }
+
+
+                TestTimeout = int.Parse( CustomIterationInterval) * int.Parse(CustomiterationsPerHost);
+                String ip = (!String.IsNullOrEmpty(host)) ? host: CustomIP.ToString();
+                this.CustomIPAdress += (!String.IsNullOrEmpty(host)) ? " ("+ip+")" : "";
+                this.Initialize(ip, netWorkResponseCollectionCustomMtr, true);
+
+            } 
             else
             {
                 DisplayControl1 = true;
                 TestTimeout = tuple.Item1 * 1000 / 4;
-                this.Initialize("8.8.8.8", netWorkResponseCollection1, false);
+                this.Initialize(MTR_IPS_LIST.First(), netWorkResponseCollection1, false);
 
             }
 
@@ -484,27 +678,64 @@ namespace NetworkResponseModule.ViewModels
 
         public override Boolean IsEmail()
         {
-            return true;
+            return isEmail;
 
         }
 
         public override String emailBody()
         {
-            return genrateEmailBody();
+            String results =  genrateEmailBody();
+            return results;
         }
+
+        String genrateEmailBodyDetails()
+        {
+            String table = ""
+
+
+                          + Constants.HTML_START_TABLE +
+
+                           Constants.HTML_START_TR +
+                           Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Intervals") +
+                           Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, CustomIterationInterval ) +
+                           Constants.HTML_END_TR + Constants.HTML_START_TR +
+                            Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Iterations") +
+                           Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, CustomiterationsPerHost) +
+
+                           Constants.HTML_END_TR + Constants.HTML_START_TR +
+                           Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Packet Size") +
+                           Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, CustomPacketSize) +
+                            Constants.HTML_END_TR + Constants.HTML_START_TR +
+                           Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_PRIMARY_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Complete Test Time") +
+                           Constants.HTML_TD.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_SECONDERY_COLOR).Replace(Constants.HTML_REPLACE_STRING, _SW.Elapsed.Seconds.ToString()) +
+
+                           Constants.HTML_END_TR;
+
+
+
+            table += Constants.HTML_END_TABLE;
+
+            return table;
+        }
+
         String genrateEmailBody()
         {
-                String table = ""; 
+
+       
+
+
+
+            String table = ""; 
              String headerTR =  
 
                              Constants.HTML_START_TR+
-                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Hostname") +
+                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Host Name") +
                              Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Loss %") +
-                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Sent") +
-                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Receive") +
-                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Best") +
-                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Average") +
-                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Worst") +
+                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Sent Packets") +
+                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Received Packets") +
+                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Best (ms)") +
+                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Average (ms)") +
+                             Constants.HTML_TH.Replace(Constants.HTML_REPLACE_STRING_COLOR, Constants.HTML_HEADER_COLOR).Replace(Constants.HTML_REPLACE_STRING, "Worst (ms)") +
                              Constants.HTML_END_TR;
 
             //if custom mtr
@@ -513,10 +744,10 @@ namespace NetworkResponseModule.ViewModels
             Dictionary<String,ObservableCollection<NetWorkResponse>> DiscTablelist = new Dictionary<String, ObservableCollection<NetWorkResponse>>();
             if (String.IsNullOrEmpty(CustomIPAdress))
             {
-                DiscTablelist.Add("8.8.8.8", netWorkResponseCollection1);
-                DiscTablelist.Add("203.82.48.3", netWorkResponseCollection2);
-                DiscTablelist.Add("115.186.188.3", netWorkResponseCollection3);
-                DiscTablelist.Add("4.2.2.2", netWorkResponseCollection4);
+                DiscTablelist.Add(MTR_IPS_LIST[0], netWorkResponseCollection1);
+                DiscTablelist.Add(MTR_IPS_LIST[1], netWorkResponseCollection2);
+                DiscTablelist.Add(MTR_IPS_LIST[2], netWorkResponseCollection3);
+                DiscTablelist.Add(MTR_IPS_LIST[3], netWorkResponseCollection4);
             }
 
             if (!String.IsNullOrEmpty(CustomIPAdress)) {
@@ -569,6 +800,22 @@ namespace NetworkResponseModule.ViewModels
             //user info like mac ip email getUserHTMLTable
 
             return TittleTable;
+        }
+        public override string getTestTittle()
+        {
+            return Constants.TEST_HEADER_TITTLE_NETWORK_RESPONSE;
+        }
+        void testFaild() {
+            TestInfo info = new TestInfo();
+            infiDic = new Dictionary<string, string>();
+            infiDic.Add("time", "23");
+            info.infiDic = infiDic;
+            info.sender = this;
+            info.testMethod = PropertyProvider.WindowsMethod.network_response;
+            info.testType = CurrentTestType;
+            this.eventAggregator.GetEvent<TestCompleteEvent>().Publish(info);
+            isEmail = false;
+
         }
     }
 

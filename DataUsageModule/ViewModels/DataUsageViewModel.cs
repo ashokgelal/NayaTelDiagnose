@@ -18,6 +18,10 @@ using System.Collections.Generic;
 using Prism.Events;
 using ViewSwitchingNavigation.Infrastructure.Events;
 using System.Threading;
+using System.Net;
+using System.Net.NetworkInformation;
+using CoreLibrary;
+using ViewSwitchingNavigation.Infrastructure.Utils;
 
 namespace DataUsageModule.ViewModels
 {
@@ -72,11 +76,13 @@ namespace DataUsageModule.ViewModels
         }
         private void Initialize()
         {
+
+             
             this.dataUsageService.clearDataUsage();
-            this.dataUsageService.GetDataUsageAsync();
+            this.dataUsageService.GetDataUsageAsync(1);
             Thread.Sleep(1000);
-            DataUsage dataUsage = this.dataUsageService.GetDataUsageAsync();
-            dataUsage.Time = "current";
+            DataUsage dataUsage = this.dataUsageService.GetDataUsageAsync(1);
+            dataUsage.Time = "Current";
             this.dataUsageCollection.Add(dataUsage);
             DataUsage tempDataUsage = new DataUsage();
             tempDataUsage.Download = dataUsage.Download;
@@ -113,7 +119,7 @@ namespace DataUsageModule.ViewModels
             {
                 if (dataUsageCollection.Count == 0)
                     return;
-                DataUsage  dataUsage = this.dataUsageService.GetDataUsageAsync();
+                DataUsage  dataUsage = this.dataUsageService.GetDataUsageAsync((int)(Interval/1000));
                  dataUsage.Time = this.dataUsageCollection.ElementAt(0).Time;
 
                 this.tempDataUsageCollection.Insert(0, dataUsage);
@@ -219,7 +225,14 @@ namespace DataUsageModule.ViewModels
         public override void StartTest()
         {
             var tuple = PropertyProvider.getPropertyProvider().getTestTimeout(this.CurrentTestMethod, this.testType);
+             
             totalTime = tuple.Item1 * 1000;
+            if (tuple.Item1 < 5) {
+                this.Interval = 2000;
+            }else
+                this.Interval = 5000;
+
+
             Initialize();
         }
 
@@ -269,9 +282,14 @@ namespace DataUsageModule.ViewModels
         public override string getTestTittleHTMLTable()
         {
             //Tittle header
-            String TittleTable = Constants.HTML_EMAIL_TITTLE.Replace(Constants.HTML_REPLACE_STRING, "Data Usage");
+            String TittleTable = Constants.HTML_EMAIL_TITTLE.Replace(Constants.HTML_REPLACE_STRING, getTestTittle());
             //user info like mac ip email getUserHTMLTable
             return TittleTable;
+        }
+
+        public override string getTestTittle()
+        {
+            return Constants.TEST_HEADER_TITTLE_DATA_USAGE;
         }
     }
 }

@@ -57,13 +57,14 @@
 
                     <StackPanel  x:Name="navigateImage" Width="30" Height="30"   Grid.Column="0" Margin="10,0,0,0"   ></StackPanel>
 
-                    <Image x:Name="imageIndicator" Visibility="Collapsed" Grid.Column="2" HorizontalAlignment="Right"   Height="30" Width="30" gif:ImageBehavior.AnimatedSource="/NayaTelDiagnose;component/Resources/Loader3.gif" Margin="0,0,40,0" />
+                    <Image x:Name="imageIndicator" Visibility="Collapsed" Grid.Column="2" HorizontalAlignment="Right"   Height="30" Width="30" gif:ImageBehavior.AnimatedSource="/NayaTelDiagnose;component/Resources/blue_loader.gif" Margin="0,0,40,0" />
 
                     <Image x:Name="imageArrow" Grid.Column="2" Height="22" Width="25" Source="/DiagnoseAll;component/Resources/arrow_down.png"   VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,5,5,0" />
 
-
-                    <TextBlock x:Name="textBlockTittle" Grid.Column="1" TextWrapping="Wrap" Width="164.83" RenderTransformOrigin="0.742,2.981" Margin="10,0,0,0" FontFamily="Yu Gothic UI Semibold" FontSize="18" Foreground="#FF244E96" Height="25.75" VerticalAlignment="Center" HorizontalAlignment="Left"><Run Text="Verify"/><Run Text=" Connectivity"/></TextBlock>
-
+                    <StackPanel Orientation="Horizontal" Grid.Column="1"  Height="50"   Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                        <TextBlock x:Name="textBlockTittle" VerticalAlignment="Center" TextWrapping="Wrap"  FontFamily="Yu Gothic UI Semibold" FontSize="18" Foreground="#FF244E96"   ><Run Text="Verify"/><Run Text=" Connectivity"/></TextBlock>
+                        <TextBlock x:Name="ShortTextBlock"  VerticalAlignment="Center" Margin="7,7,0,0" TextWrapping="Wrap" Text="Check if internet is connected"    Foreground="#ff777777"  FontSize="11"   FontFamily="Tahoma"/>
+                    </StackPanel>
 
                 </Grid>
             </Border>

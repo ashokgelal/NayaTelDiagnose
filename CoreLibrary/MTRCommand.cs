@@ -13,7 +13,7 @@ namespace nettools.Core.Commands
 
     public class MTRCommand 
     {
-        public delegate void mtrResult(int loopInternalCount, int loopCount, string host, int Loss,
+        public delegate void mtrResult(int loopInternalCount, int loopCount, string host, float Loss,
                       int Recv, int sent, int last, 
                         int best, double avg, int worst, int index);
         public delegate void mtrRoutes(IEnumerable<IPAddress> routes);
